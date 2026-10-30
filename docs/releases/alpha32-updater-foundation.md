@@ -13,6 +13,8 @@ Alpha 32 is the source-development line following the confirmed Alpha 31 behavio
 - UI-health-confirmed relaunch with rollback on failure.
 - Release-manifest/package generation helper.
 - Archive-compatible root-layout guard and negative control.
+- Reproducible source-archive packager with SHA-256 file manifest and generated-artifact exclusions.
+- Repository `NuGet.Config` that explicitly restores from the official NuGet v3 source.
 
 ## Compatibility
 
@@ -34,6 +36,6 @@ A matching SHA-256 verifies integrity against release metadata; it is not code s
 
 ## Validation status
 
-Private source/static parity, updater contract, unsafe-archive negative controls, and root-clutter negative control pass, including checks from a fresh extracted source archive without `.git`.
+Private source/static parity, updater contract, unsafe-archive negative controls, root-clutter negative control, source-archive plan checks, and the embedded archive SHA-256 manifest pass from a fresh extracted source archive without `.git`.
 
 Fresh .NET compilation, native Windows/WebView2 launch, real GitHub update/relaunch/rollback, and live Blender validation remain release gates.

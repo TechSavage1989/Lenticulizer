@@ -91,10 +91,11 @@ The Alpha 32 source snapshot passed the available non-.NET checks after a fresh 
 - Updater stable-launch/per-user-state/static-security contracts.
 - Unsafe archive extra-file/traversal negative controls.
 - Root clean-tree and clutter negative controls.
+- Source archive plan/manifest checks from a fresh extracted archive without `.git`.
 
 Private Alpha 32 source snapshot SHA-256:
 
-`666b24857921132152268df168aeea7630191ae660ce35e2ba1a5a795c8f3cf7`
+`d8f87f0147d183dbabe8f769ee10b690e05d9010c940921ec7033ece470493c0`
 
 Not performed in this environment:
 
@@ -128,7 +129,7 @@ Expected release assets:
 - `release\update-manifest.json`
 - `release\SHA256SUMS.txt`
 
-The source pins .NET SDK 10.0.400 and runtime 10.0.11 and includes the Fixed WebView2 Runtime build payload.
+The source pins .NET SDK 10.0.400 and runtime 10.0.11, includes the Fixed WebView2 Runtime build payload, and carries a repository `NuGet.Config` that explicitly restores from the official NuGet v3 source instead of inheriting machine-specific package-source state.
 
 ## Next release gates
 
