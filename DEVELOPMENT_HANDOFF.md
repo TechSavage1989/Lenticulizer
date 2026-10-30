@@ -92,10 +92,11 @@ The Alpha 32 source snapshot passed the available non-.NET checks after a fresh 
 - Unsafe archive extra-file/traversal negative controls.
 - Root clean-tree and clutter negative controls.
 - Source archive plan/manifest checks from a fresh extracted archive without `.git`.
+- Final source snapshot is preserved privately for future continuation; it is not published in this public repository.
 
 Private Alpha 32 source snapshot SHA-256:
 
-`d8f87f0147d183dbabe8f769ee10b690e05d9010c940921ec7033ece470493c0`
+`fa20464d3add72707eee76ad9b3e811e73a59fc5ecdb3d1f5cd66c877c1628b8`
 
 Not performed in this environment:
 
