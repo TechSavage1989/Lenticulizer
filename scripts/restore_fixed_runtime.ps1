@@ -36,7 +36,10 @@ try {
 
     $expectedBrowser = @($expected.files | Where-Object { $_.path -like 'browser/*' })
     $expectedMap = @{}
-    foreach ($item in $expectedBrowser) { $expectedMap[$item.path.Substring(8).Replace('/','\\')] = $item }
+    foreach ($item in $expectedBrowser) {
+        $relativePath = $item.path.Substring(8).Replace('/', [IO.Path]::DirectorySeparatorChar)
+        $expectedMap[$relativePath] = $item
+    }
 
     # Some Microsoft WebView2 cabinets contain mutable preload-data files that were
     # not present in the Lenticulizer baseline. Reconstruct the exact pinned browser

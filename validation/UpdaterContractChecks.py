@@ -22,6 +22,14 @@ nuget=text('NuGet.Config')
 start=text('Start_Lenticulizer.bat')
 ui_check=text('Run_Windows_UI_Check.bat')
 
+# Regression: the WebView2 cabinet uses native Windows separators. The broken
+# variant used two literal backslashes and caused every restored browser file
+# to be treated as an extra, deleted, and subsequently reported missing.
+runtime_restore=text('scripts/restore_fixed_runtime.ps1')
+assert ".Replace('/', [IO.Path]::DirectorySeparatorChar)" in runtime_restore
+assert "foreach ($item in $expectedBrowser) { $expectedMap[" not in runtime_restore
+assert "Expected runtime file is missing" in runtime_restore
+
 # Stable identity and package entry point.
 assert '3.0.0-alpha.32' in program
 assert '<AssemblyName>Lenticulizer</AssemblyName>' in csproj
