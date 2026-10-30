@@ -1,0 +1,153 @@
+name: Windows source validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      publish_release:
+        description: Publish the validated Alpha 32 prerelease
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+env:
+  RELEASE_TAG: v3.0.0-alpha.32
+  RELEASE_TITLE: Lenticulizer v3.0.0-alpha.32
+
+jobs:
+  validate:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.400
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install Python validation dependencies
+        run: python -m pip install -r validation/requirements.txt
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Restore pinned WebView2 Fixed Version runtime
+        shell: cmd
+        run: Restore_Build_Assets.bat
+
+      - name: Run source checks
+        shell: cmd
+        run: validation\Run_Source_Checks.bat
+
+      - name: Restore application and test projects
+        shell: cmd
+        run: |
+          dotnet restore Lenticulizer.csproj --configfile NuGet.Config
+          dotnet restore validation\RuntimeTests\RuntimeTests.csproj --configfile NuGet.Config
+          dotnet restore validation\DropImportTests\DropImportTests.csproj --configfile NuGet.Config
+          dotnet restore validation\IntegratedAppTests\IntegratedAppTests.csproj --configfile NuGet.Config
+
+      - name: Build application
+        run: dotnet build Lenticulizer.csproj -c Release --no-restore --disable-build-servers
+
+      - name: Run .NET parity tests
+        shell: cmd
+        run: validation\Run_Core_Parity_Tests.bat
+
+      - name: Publish self-contained executable
+        run: dotnet publish Lenticulizer.csproj -c Release --no-restore --disable-build-servers -o dist
+
+      - name: Verify embedded core
+        shell: cmd
+        run: start "" /wait "dist\Lenticulizer.exe" --verify-core "%TEMP%\Lenticulizer_Core_Check.txt"
+
+      - name: Verify bundled runtime
+        shell: cmd
+        run: start "" /wait "dist\Lenticulizer.exe" --verify-runtime "%TEMP%\Lenticulizer_Runtime_Check.json"
+
+      - name: Run Windows UI check
+        shell: cmd
+        run: Run_Windows_UI_Check.bat --no-pause
+
+      - name: Package portable release
+        shell: cmd
+        run: |
+          if exist release rmdir /s /q release
+          mkdir release
+          "dist\Lenticulizer.exe" --package-release "%CD%\release"
+
+      - name: Package source archive
+        shell: pwsh
+        run: |
+          python packaging/package_source.py "release/Lenticulizer_v3.0.0-alpha.32_Source.zip"
+          Copy-Item "release/Lenticulizer_v3.0.0-alpha.32_Source_SHA256.txt" "release/Source_SHA256.txt" -Force
+          Copy-Item "blender/Lenticulizer_3D_Blender_Addon_v1.18.43.zip" "release/Lenticulizer_3D_Blender_Addon_v1.18.43.zip" -Force
+          $addon = (Get-FileHash "release/Lenticulizer_3D_Blender_Addon_v1.18.43.zip" -Algorithm SHA256).Hash.ToLowerInvariant()
+          $source = (Get-FileHash "release/Lenticulizer_v3.0.0-alpha.32_Source.zip" -Algorithm SHA256).Hash.ToLowerInvariant()
+          Add-Content "release/SHA256SUMS.txt" "$addon  Lenticulizer_3D_Blender_Addon_v1.18.43.zip"
+          Add-Content "release/SHA256SUMS.txt" "$source  Lenticulizer_v3.0.0-alpha.32_Source.zip"
+
+      - name: Verify source archive construction
+        run: python validation/SourceArchiveChecks.py
+
+      - name: Upload validated release assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: lenticulizer-alpha32-release
+          path: release/*
+          if-no-files-found: error
+          compression-level: 0
+
+  release:
+    if: (github.event_name == 'workflow_dispatch' && inputs.publish_release == true) || (github.event_name == 'push' && github.event.head_commit.message == 'Install Alpha 32 CI and publish prerelease')
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out validated commit
+        uses: actions/checkout@v4
+
+      - name: Download validated release assets
+        uses: actions/download-artifact@v4
+        with:
+          name: lenticulizer-alpha32-release
+          path: release
+
+      - name: Verify tag does not already exist
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git ls-remote --exit-code --tags origin "refs/tags/${RELEASE_TAG}" >/dev/null 2>&1; then
+            echo "Release tag ${RELEASE_TAG} already exists; refusing to overwrite it."
+            exit 1
+          fi
+
+      - name: Publish Alpha 32 prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${RELEASE_TAG}" \
+            release/Lenticulizer_Windows_Portable.zip \
+            release/update-manifest.json \
+            release/SHA256SUMS.txt \
+            release/Lenticulizer_3D_Blender_Addon_v1.18.43.zip \
+            release/Lenticulizer_v3.0.0-alpha.32_Source.zip \
+            --target "${GITHUB_SHA}" \
+            --prerelease \
+            --title "${RELEASE_TITLE}" \
+            --notes "Alpha 32 establishes the stable Lenticulizer.exe portable package and GitHub updater foundation while preserving the Alpha 31 application and Blender workflow baseline. This is a prerelease."
