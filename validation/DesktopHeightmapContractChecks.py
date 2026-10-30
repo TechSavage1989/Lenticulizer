@@ -28,5 +28,8 @@ assert manifest['schema_version']=='1.0.0' and manifest['version']=='1.18.43' an
 for p in addon.glob('*.py'):ast.parse(p.read_text())
 with zipfile.ZipFile(root/'blender/Lenticulizer_3D_Blender_Addon_v1.18.43.zip') as z:
  assert set(z.namelist())=={'blender_manifest.toml','__init__.py','heightmap_analysis.py','test_output.py','README.txt'}
- for name in z.namelist():assert z.read(name)==(addon/name).read_bytes(), 'Stale bundled add-on source'
+ for name in z.namelist():
+  packed=z.read(name)
+  unpacked=(addon/name).read_bytes()
+  assert packed==unpacked, f'Stale bundled add-on source: {name}; CRLF in checkout={unpacked.count(bytes([13,10]))}, CRLF in zip={packed.count(bytes([13,10]))}'
 print('PASS: desktop DOM and bridge wiring; Front default with preserved rotation; extension identity, manifest and bundled Python source consistency.')

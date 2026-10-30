@@ -1,0 +1,6 @@
+# Keep the Blender add-on Python and metadata byte-identical to the bundled ZIP.
+# Git for Windows may otherwise convert LF to CRLF during checkout.
+blender/Lenticulizer_Blender_Addon_v1.18.43/*.py text eol=lf
+blender/Lenticulizer_Blender_Addon_v1.18.43/*.txt text eol=lf
+blender/Lenticulizer_Blender_Addon_v1.18.43/*.toml text eol=lf
+blender/Lenticulizer_3D_Blender_Addon_v1.18.43.zip binary
