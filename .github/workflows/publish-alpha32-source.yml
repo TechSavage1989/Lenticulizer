@@ -50,9 +50,11 @@ jobs:
         run: |
           $target = Join-Path $env:RUNNER_TEMP "lenticulizer-alpha32-source"
 
-          Get-ChildItem -Force | Where-Object { $_.Name -ne ".git" } | Remove-Item -Recurse -Force
+          Get-ChildItem -Force | Where-Object { $_.Name -notin @(".git", ".github") } | Remove-Item -Recurse -Force
 
-          & robocopy $target $PWD.Path /E /COPY:DAT /R:2 /W:1 /NFL /NDL /NJH /NJS
+          $repoRoot = $env:GITHUB_WORKSPACE
+          $sourceWorkflowDir = Join-Path $target ".github"
+          & robocopy $target $repoRoot /E /XD $sourceWorkflowDir /COPY:DAT /R:2 /W:1 /NFL /NDL /NJH /NJS
           $robocopyExit = $LASTEXITCODE
           if ($robocopyExit -gt 7) {
             throw "robocopy failed with exit code $robocopyExit"
@@ -77,19 +79,3 @@ jobs:
           }
           git commit -m "Publish Alpha 32 source foundation"
           git push origin HEAD:main
-
-      - name: Dispatch Windows validation and approved prerelease
-        shell: pwsh
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          for ($attempt = 1; $attempt -le 12; $attempt++) {
-            gh workflow run ci.yml --ref main -f publish_release=true
-            if ($LASTEXITCODE -eq 0) {
-              Write-Host "Dispatched ci.yml on attempt $attempt."
-              exit 0
-            }
-            Write-Host "ci.yml is not dispatchable yet; retrying in 10 seconds."
-            Start-Sleep -Seconds 10
-          }
-          throw "Could not dispatch ci.yml after publishing source."
