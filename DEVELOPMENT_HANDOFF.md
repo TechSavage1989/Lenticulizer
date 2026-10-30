@@ -24,17 +24,20 @@ Important: Alpha 31 was produced before this repository became the development b
 
 ## Maintainable-source status
 
-The latest recoverable source archive inspected during bootstrap is older than the functional baseline:
+The Alpha 31 functional baseline has now been reconstructed into a complete build-ready source tree **outside this public repository**. Source-publication scope remains unapproved, so application source has not been committed here.
 
-- Alpha 26 self-contained source is recoverable.
-- Alpha 27 Help/About source is recoverable.
-- Later Alpha 28–31 changes were validated and packaged during prior development, but a complete current Alpha 31 source tree has not yet been established in GitHub.
+The recovery reconciles Alpha 26/27 maintainable source with the recorded Alpha 28–31 changes instead of treating older Alpha 27 source as current.
 
-Therefore:
+Recovered items include:
 
-- do not treat Alpha 27 source as equivalent to Alpha 31;
-- do not regress to an older source archive merely because it is easier to build;
-- reconstruct or reconcile later changes before declaring the repository source current.
+- Alpha 28 backing/support enabled state and remembered thickness behavior;
+- Alpha 29 compact Images/Optics presentation and local layout preferences;
+- the exact Project(6) Blender baseline;
+- Blender add-on 1.18.43;
+- Alpha 31 labeled-test export helper and desktop wiring;
+- a complete Fixed WebView2 Runtime archive with the current baseline/add-on embedded.
+
+A private recovery snapshot was preserved for future continuation. The reconstructed source is **not yet authoritative** because a fresh .NET compiler build and native Windows validation have not been completed.
 
 ## Current known feature baseline
 
@@ -82,13 +85,14 @@ Do not publish application source solely because this repository is public.
 Before source migration:
 
 1. Confirm approved source-publication scope.
-2. Reconstruct/reconcile the current Alpha 31 source from the latest recoverable source plus later validated changes.
-3. Build from that reconciled source.
-4. Compare behavior/output against the Alpha 31 baseline.
-5. Organize the source tree.
-6. Add the root-layout guard and CI.
-7. Rebuild from a fresh source archive without `.git`.
-8. Only then establish the repository as authoritative.
+2. Fresh-compile the reconstructed Alpha 31 source.
+3. Compare the compiler-built behavior/output against the Alpha 31 baseline.
+4. Run native Windows/WebView2 and live-Blender validation.
+5. Implement the stable launch filename and production updater requirements.
+6. Organize the source tree.
+7. Add the root-layout guard and CI.
+8. Rebuild from a fresh source archive without `.git`.
+9. Only then establish the repository as authoritative.
 
 ## Validation facts inherited from Alpha 31
 
@@ -105,9 +109,23 @@ Do not upgrade those historical checks into stronger claims.
 
 ## Build/test commands
 
-The current repository does not yet contain an authoritative current source tree, so there is no repository build command that should be advertised as producing Alpha 31.
+The current repository does not contain application source, so no repository build command should be advertised as producing Alpha 31.
 
-Older recoverable source used .NET SDK 10.0.400 and Windows self-contained build scripts, but those commands must be revalidated after source reconciliation.
+The private reconstructed source targets .NET SDK 10.0.400 and runtime 10.0.11. Its Windows build entry is `Build_SelfContained.bat`.
+
+Recovery-environment checks passed:
+
+- JavaScript syntax for bridge, renderer and labeled-test helper;
+- WebView2 bridge regression checks;
+- drag/drop UI-handler regression checks;
+- desktop DOM/bridge/add-on-package contract checks;
+- 30 heightmap raster/direction/phase/filter/bit-depth fixtures;
+- 33 Blender add-on callback/project/geometry/export checks with API doubles;
+- cross-language JavaScript/Python labeled-test comparison using real PNGs, including unchanged active RGB/16-bit height samples, zero heightmap footer, matching label plans and valid ZIP CRC;
+- baseline/add-on/fixed-runtime identity checks;
+- all 555 browser/loader/notices records match the prior trusted runtime payload.
+
+The recovery environment does not contain .NET SDK 10.0.400 and blocks direct SDK package downloads, so a fresh compiler build was not executed there. Microsoft release metadata confirms SDK 10.0.400 pairs with runtime 10.0.11, matching the reconstructed source configuration.
 
 ## Settings/storage paths
 
@@ -117,7 +135,8 @@ Do not persist mutable settings beside the executable.
 
 ## Known limitations / open work
 
-- Current source baseline has not yet been migrated to GitHub.
+- Reconstructed current source remains private and has not been migrated to GitHub.
+- The reconstructed source still needs a fresh compiler build and Windows-native comparison before it becomes authoritative.
 - No GitHub release/update feed exists.
 - Production updater requirements are not implemented in the recoverable source.
 - Stable non-versioned Windows launch filename/update migration is not yet repository-validated.
