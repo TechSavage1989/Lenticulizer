@@ -61,6 +61,8 @@ jobs:
           if (-not (Test-Path -LiteralPath "Lenticulizer.csproj")) {
             throw "Approved source did not copy to the repository root."
           }
+
+          git add -A
           python scripts/check_root.py
 
       - name: Commit approved Alpha 32 source
