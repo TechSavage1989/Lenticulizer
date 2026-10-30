@@ -51,10 +51,16 @@ jobs:
           $target = Join-Path $env:RUNNER_TEMP "lenticulizer-alpha32-source"
 
           Get-ChildItem -Force | Where-Object { $_.Name -ne ".git" } | Remove-Item -Recurse -Force
-          Get-ChildItem -Force -LiteralPath $target | ForEach-Object {
-            Copy-Item -LiteralPath $_.FullName -Destination $PWD -Recurse -Force
+
+          & robocopy $target $PWD.Path /E /COPY:DAT /R:2 /W:1 /NFL /NDL /NJH /NJS
+          $robocopyExit = $LASTEXITCODE
+          if ($robocopyExit -gt 7) {
+            throw "robocopy failed with exit code $robocopyExit"
           }
 
+          if (-not (Test-Path -LiteralPath "Lenticulizer.csproj")) {
+            throw "Approved source did not copy to the repository root."
+          }
           python scripts/check_root.py
 
       - name: Commit approved Alpha 32 source
