@@ -1,0 +1,87 @@
+name: Publish approved Alpha 32 source
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  publish-source:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: windows-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out bootstrap commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify and extract approved source
+        shell: pwsh
+        run: |
+          $sourceZip = Join-Path $PWD ".github\bootstrap\source.zip"
+          if (-not (Test-Path -LiteralPath $sourceZip)) {
+            throw "Approved source payload is missing."
+          }
+
+          $actual = (Get-FileHash -LiteralPath $sourceZip -Algorithm SHA256).Hash.ToLowerInvariant()
+          $expected = "131806a99804a1824e9e8cf454af533db2f6c49d99220279321916e152a3372b"
+          if ($actual -ne $expected) {
+            throw "Approved source payload hash mismatch. Expected $expected, got $actual."
+          }
+
+          $target = Join-Path $env:RUNNER_TEMP "lenticulizer-alpha32-source"
+          if (Test-Path -LiteralPath $target) {
+            Remove-Item -LiteralPath $target -Recurse -Force
+          }
+          Expand-Archive -LiteralPath $sourceZip -DestinationPath $target -Force
+
+          if (-not (Test-Path -LiteralPath (Join-Path $target "Lenticulizer.csproj"))) {
+            throw "Extracted source payload is not a Lenticulizer source root."
+          }
+
+      - name: Replace bootstrap tree with approved source
+        shell: pwsh
+        run: |
+          $target = Join-Path $env:RUNNER_TEMP "lenticulizer-alpha32-source"
+
+          Get-ChildItem -Force | Where-Object { $_.Name -ne ".git" } | Remove-Item -Recurse -Force
+          Get-ChildItem -Force -LiteralPath $target | ForEach-Object {
+            Copy-Item -LiteralPath $_.FullName -Destination $PWD -Recurse -Force
+          }
+
+          python scripts/check_root.py
+
+      - name: Commit approved Alpha 32 source
+        shell: pwsh
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet
+          if ($LASTEXITCODE -eq 0) {
+            throw "Approved source publication produced no repository changes."
+          }
+          git commit -m "Publish Alpha 32 source foundation"
+          git push origin HEAD:main
+
+      - name: Dispatch Windows validation and approved prerelease
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for ($attempt = 1; $attempt -le 12; $attempt++) {
+            gh workflow run ci.yml --ref main -f publish_release=true
+            if ($LASTEXITCODE -eq 0) {
+              Write-Host "Dispatched ci.yml on attempt $attempt."
+              exit 0
+            }
+            Write-Host "ci.yml is not dispatchable yet; retrying in 10 seconds."
+            Start-Sleep -Seconds 10
+          }
+          throw "Could not dispatch ci.yml after publishing source."
