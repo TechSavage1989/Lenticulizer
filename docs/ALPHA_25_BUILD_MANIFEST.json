@@ -1,0 +1,21 @@
+{
+  "version": "3.0.0-alpha.25",
+  "based_on": "3.0.0-alpha.24",
+  "change": "Automatic heightmap recognition and drop import; collapsible options help",
+  "addon_version": "1.18.38",
+  "binary": {
+    "name": "Lenticulizer_3D_v3.0.0-alpha.25_SelfContained.exe",
+    "bytes": 551030869,
+    "sha256": "320b66ec07038a363329cdb84bd0baca6cd21642123dac59faae349d63bcf3db"
+  },
+  "validation": {
+    "publish_succeeded": true,
+    "ui_wiring_checked": true,
+    "bundle_entries": 458,
+    "windows_gui_executed": false,
+    "live_blender_executed": false,
+    "core_tests_rerun": false,
+    "drop_import_checks": 119,
+    "drop_ui_tests": true
+  }
+}

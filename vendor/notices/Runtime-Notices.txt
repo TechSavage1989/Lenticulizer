@@ -1,0 +1,17 @@
+Lenticulizer runtime notices
+
+Lenticulizer includes Microsoft .NET 10 and Microsoft Edge WebView2 Runtime
+152.0.4191.62 (Fixed Version), with their accompanying license and third-party
+notices. Use of the bundled Microsoft components is subject to those terms.
+
+Microsoft WebView2 may collect diagnostic data as described in its license and
+Microsoft privacy statement: https://privacy.microsoft.com/privacystatement
+The application does not add analytics or upload your source images.
+
+The complete WebView2 Runtime license is in WebView2-Runtime-License.html.
+.NET license and notices are in DotNET-LICENSE.TXT and
+DotNET-THIRD-PARTY-NOTICES.TXT. WebView2 SDK notices are included beside this file.
+The browser folder also contains the unmodified Microsoft and Chromium notices.
+
+Bundled runtime versions are updated with Lenticulizer releases. No runtime
+installer or runtime download is needed to launch this build.

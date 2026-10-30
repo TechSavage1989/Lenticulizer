@@ -1,0 +1,19 @@
+{
+  "version": "3.0.0-alpha.24",
+  "based_on": "3.0.0-alpha.23",
+  "change": "One Import heightmap button in Images / Reference heightmap",
+  "addon_version": "1.18.38",
+  "binary": {
+    "name": "Lenticulizer_3D_v3.0.0-alpha.24_SelfContained.exe",
+    "bytes": 551018581,
+    "sha256": "704a2d1323873e7f90c10c5ecd1f7947e50df865b256eb2f1925c4aebc3f267e"
+  },
+  "validation": {
+    "publish_succeeded": true,
+    "ui_wiring_checked": true,
+    "bundle_entries": 458,
+    "windows_gui_executed": false,
+    "live_blender_executed": false,
+    "core_tests_rerun": false
+  }
+}

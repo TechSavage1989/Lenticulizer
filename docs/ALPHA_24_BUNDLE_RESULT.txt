@@ -1,0 +1,2 @@
+PASS: Windows x64 single EXE; 458 bundled files match the actual build inputs, including .NET 10.0.11, WinForms, WebView2 SDK and embedded processing. No installed framework required by runtimeconfig.
+Build inputs outside the bundle: clrgc.dll, clrjit.dll, msquic.dll, hostfxr.dll, createdump.exe, mscordaccore_amd64_amd64_10.0.1126.37416.dll, System.IO.Compression.Native.dll, mscordbi.dll, clrgcexp.dll, mscorrc.dll, mscordaccore.dll, Microsoft.DiaSymReader.Native.amd64.dll, hostpolicy.dll, coreclr.dll, Lenticulizer_3D.exe, clretwrc.dll

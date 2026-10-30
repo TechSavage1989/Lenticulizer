@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'none'" />
+  <title>Lenticulizer v3</title>
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <img src="../assets/Lenticulizer_Icon_Source.svg" alt="Lenticulizer" />
+        <div>
+          <div class="brand-row"><h1>Lenticulizer</h1><span class="version">v3.0.0 alpha 32</span></div>
+          <p>Interlacing, lens geometry and print output in one application.</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button id="compactNavButton" class="chrome-button" type="button" aria-pressed="false" title="Compact navigation">Compact nav</button>
+        <button id="togglePreviewButton" class="chrome-button" type="button" aria-pressed="false" title="Hide or restore the preview pane">Hide preview</button>
+        <div id="backendStatus" class="status-pill status-warn">Initializing processing</div>
+      </div>
+    </header>
+    <section id="updateBanner" class="update-banner hidden" aria-live="polite">
+      <div class="update-copy">
+        <strong id="updateHeadline">Update available</strong>
+        <span id="updateVersionText"></span>
+        <ul id="updateNotes" class="update-notes"></ul>
+      </div>
+      <div class="update-actions">
+        <button id="updateReadMoreButton" class="button ghost small hidden" type="button">Read more</button>
+        <button id="updateDownloadButton" class="button secondary small" type="button">Download</button>
+        <button id="updateInstallButton" class="button primary small hidden" type="button">Install and restart</button>
+        <button id="updateDismissButton" class="button ghost small" type="button">Dismiss</button>
+      </div>
+    </section>
+
+    <div class="workspace">
+      <aside class="sidebar">
+        <nav id="nav">
+          <button class="nav-item active" data-page="project"><span class="nav-icon">01</span><span>Project</span></button>
+          <button class="nav-item" data-page="sources"><span class="nav-icon">02</span><span>Images</span></button>
+          <button class="nav-item" data-page="optics"><span class="nav-icon">03</span><span>Optics</span></button>
+          <button class="nav-item" data-page="output"><span class="nav-icon">04</span><span>Output</span></button>
+          <button class="nav-item" data-page="calibration"><span class="nav-icon">05</span><span>Calibration</span></button>
+          <button class="nav-item" data-page="blender"><span class="nav-icon">06</span><span>Blender</span></button>
+          <button class="nav-item" data-page="help"><span class="nav-icon">?</span><span>Help</span></button>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="mini-label">Session</div>
+          <div id="sessionName" class="session-name">Preparing...</div>
+          <button id="openSessionButton" class="text-button">Open session folder</button>
+        </div>
+      </aside>
+
+      <div id="sidebarSplitter" class="pane-splitter vertical" title="Drag to resize navigation"></div>
+
+      <main class="main-pane">
+        <section class="settings-mode-bar" aria-labelledby="settingsModeLabel">
+          <h2 id="settingsModeLabel">Settings mode</h2>
+          <div class="settings-mode-options" role="radiogroup" aria-labelledby="settingsModeLabel" aria-describedby="settingsModeHint">
+            <label><input type="radio" name="settings-mode" value="Automatic" checked /><span>Automatic</span></label>
+            <label><input type="radio" name="settings-mode" value="Semi-Automatic" /><span>Semi-Automatic</span></label>
+            <label><input type="radio" name="settings-mode" value="Manual" /><span>Manual</span></label>
+          </div>
+          <p id="settingsModeHint" aria-live="polite"></p>
+          <select id="settingsMode" hidden aria-hidden="true" tabindex="-1"><option selected>Automatic</option><option>Semi-Automatic</option><option>Manual</option></select>
+        </section>
+        <section class="page active" data-page="project">
+          <div class="page-heading">
+            <div><div class="eyebrow">Setup</div><h2>Project and printer</h2><p>Configure the printer, image sources and final print size.</p></div>
+          </div>
+
+          <div id="projectDropZone" class="card input-summary-card drop-zone project-drop-zone">
+            <div class="card-heading"><div><h3>Input</h3><p>The input mode is selected automatically by what you do. Add source views to build an interlace, or import an existing interlaced image directly.</p></div><span id="workflowBadge" class="mode-badge">Source images</span></div>
+            <div class="input-actions">
+              <button id="projectAddImagesButton" class="input-action-card">
+                <span class="input-action-icon">+</span>
+                <span><strong>Add source images</strong><small>Open the Images workspace and add 2 to 8 source views.</small></span>
+              </button>
+              <button id="importInterlacedButton" class="input-action-card">
+                <span class="input-action-icon">↗</span>
+                <span><strong>Use existing interlaced image</strong><small>Import an interlaced raster and continue to geometry and output.</small></span>
+              </button>
+            </div>
+            <div class="project-drop-hint"><strong>Drop source images or a lens heightmap here.</strong><span>PNG, JPG, BMP and TIFF are accepted. Repeating grayscale lens heightmaps are detected automatically and opened on Images.</span></div>
+            <div class="input-current"><span>Source images</span><strong id="projectSourceCount">0 loaded</strong></div>
+            <div class="input-current"><span>Current interlaced asset</span><strong id="interlacedName">No interlaced image loaded</strong></div>
+          </div>
+
+          <div class="grid two">
+            <div class="card">
+              <div class="card-heading"><div><h3>Printer</h3><p>Production raster and automation behavior.</p></div></div>
+              <div class="field-grid two">
+                <label class="field span-two"><span>Printer DPI</span><select id="printerDpi"><option>600</option><option>720</option><option>1200</option><option selected>1440</option><option>2400</option></select></label>
+                <label class="field span-two"><span>Output mode</span><select id="outputMode"><option selected>Lenticular Lens</option><option>Lens-Free Relief</option></select></label>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-heading"><div><h3>Final print size</h3><p>Physical dimensions used by interlacing and heightmap generation.</p></div></div>
+              <div class="field-grid three">
+                <label class="field"><span>Width</span><input id="widthMm" type="number" min="0.01" step="0.1" value="100" /></label>
+                <label class="field"><span>Height</span><input id="heightMm" type="number" min="0.01" step="0.1" value="100" /></label>
+                <label class="field"><span>Units</span><select id="units"><option selected>mm</option><option>in</option></select></label>
+                <label class="field span-three"><span>Lens direction</span><select id="orientation"><option selected>Vertical</option><option>Horizontal</option></select></label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page compact-workflow-page" data-page="sources">
+          <div class="page-heading compact-heading">
+            <div><div class="eyebrow">Images</div><h2>Images and build</h2><p>Add and order source views, control interlacing, and keep the production pair current.</p></div>
+            <div class="page-actions compact-toolbar">
+              <button id="addImagesButton" class="button primary">Add source images</button>
+              <button id="importInterlacedImagesButton" class="button secondary">Import interlaced</button>
+              <button id="importHeightmapButton" class="button secondary">Import heightmap</button>
+            </div>
+          </div>
+
+          <div class="card compact-card">
+            <div class="source-toolbar">
+              <div><h3>View sequence</h3><p id="viewOrderHint">Vertical lens direction: left to right source order.</p></div>
+              <div class="inline-actions source-display-actions">
+                <label class="mini-select"><span>Thumbnails</span><select id="sourceThumbSize"><option value="small">Small</option><option value="medium" selected>Medium</option><option value="large">Large</option></select></label>
+                <button id="clearImagesButton" class="button ghost small">Clear</button>
+              </div>
+            </div>
+            <div id="sourceGrid" class="source-grid thumb-medium empty drop-zone" tabindex="0">
+              <div class="empty-state"><strong>Drop source images here</strong><span>Drop 2 to 8 source images or a lens heightmap. Heightmaps are detected automatically.</span></div>
+            </div>
+            <div class="drop-help"><span>Drag cards to reorder them.</span><span id="sourceCountLabel">0 / 8 images</span></div>
+          </div>
+
+          <div class="card compact-card">
+            <div class="card-heading"><div><h3>Interlace settings</h3><p>Image-dependent changes automatically rebuild the matched production files.</p></div></div>
+            <div class="field-grid compact-three">
+              <label class="field"><span>LPI</span><input id="lpi" type="number" min="0.1" step="0.001" value="24" /></label>
+              <label class="field"><span>Views</span><input id="views" type="number" min="1" max="8" step="1" value="2" /></label>
+              <label class="field"><span>LPI helper</span><select id="lpiMode"><option>Detect from image</option><option selected>Recommended</option><option>Manual</option></select></label>
+              <label class="field"><span>Preset</span><select id="lpiPreset"><option>Easier</option><option selected>Balanced</option><option>Finer</option></select></label>
+              <label class="field"><span>Build quality</span><select id="buildDetail"><option selected>Auto from printer DPI</option><option>Quick draft</option><option>Balanced</option><option>Fine detail</option><option>Custom</option></select></label>
+              <label class="field"><span>Pixels / lenticule</span><input id="pixelsPerLens" type="number" min="2" step="1" value="60" /></label>
+            </div>
+            <div id="interlaceControlHint" class="control-hint">Recommended LPI and image detail update automatically.</div>
+            <div class="build-divider"></div>
+            <label class="field"><span>Heightmap registration / phase offset</span><div class="range-row"><input id="phase" type="range" min="-0.5" max="0.5" step="0.001" value="0" /><output id="phaseValue">+0.000 pitch</output></div></label>
+            <details class="compact-details analysis-details">
+              <summary>Analyze / verify LPI</summary>
+              <div class="details-body">
+                <div class="action-row compact-top"><button id="analyzeButton" class="button ghost">Analyze / Verify LPI</button></div>
+                <div id="analysisResult" class="info-panel">Run Analyze / Verify LPI to inspect the current generated or imported interlaced image.</div>
+              </div>
+            </details>
+          </div>
+
+          <details class="card compact-card drop-zone reference-details" id="referenceHeightmapCard">
+            <summary class="details-summary-row">
+              <span><strong>Reference heightmap</strong><small id="referenceSummaryStatus">No reference loaded</small></span>
+              <span id="referenceSummaryName" class="details-file-name">Optional</span>
+            </summary>
+            <div class="details-body">
+              <div id="referenceHeightmapEmpty" class="control-hint">Drop a grayscale PNG or TIFF here. Lens spacing and direction are detected automatically.</div>
+              <div id="referenceHeightmapFields" class="hidden">
+                <div class="reference-map-summary"><img id="referenceHeightmapImage" alt="Imported reference heightmap" /><div><strong id="referenceHeightmapName"></strong><p id="referenceHeightmapAnalysis" role="status"></p></div></div>
+                <div class="field-grid three">
+                  <label class="field"><span>Width (mm)</span><input id="referenceWidth" type="number" min="0.01" max="100000" step="0.1" value="100" /></label>
+                  <label class="field"><span>Height (mm)</span><input id="referenceHeight" type="number" min="0.01" max="100000" step="0.1" value="100" /></label>
+                  <label class="field"><span>White-level height (mm)</span><input id="referenceScale" type="number" min="0.0001" max="5" step="0.01" value="1.86" /></label>
+                  <label class="field"><span>Detection</span><select id="referenceDetection"><option>Automatic</option><option>Manual</option></select></label>
+                  <label class="field"><span>Lens direction</span><select id="referenceOrientation"><option>Vertical</option><option>Horizontal</option></select></label>
+                  <label class="field"><span>Pixels per lens</span><input id="referencePitch" type="number" min="2" step="0.000001" value="24" /></label>
+                  <label class="field"><span>Registration (pitch)</span><input id="referencePhase" type="number" min="-0.5" max="0.5" step="0.001" value="0" /></label>
+                  <label class="field"><span>Reference display</span><select id="referenceStyle"><option value="OPAQUE">Opaque</option><option value="TINTED">Tinted</option><option value="CLEAR">Clear</option></select></label>
+                </div>
+                <p class="control-hint" id="referenceHeightmapScaleHint"></p>
+                <div class="action-row"><button id="referenceAnalyzeButton" class="button secondary">Detect again</button><button id="referenceBuildButton" class="button primary">Build from heightmap</button><button id="referencePreviewButton" class="button secondary">Reference 3D</button><button id="referenceProjectButton" class="button secondary">Project 3D</button><button id="referenceClearButton" class="button ghost">Clear reference</button></div>
+                <button id="referenceProceduralButton" class="button ghost small">Return to generated lens geometry</button>
+              </div>
+              <details class="heightmap-help compact-details">
+                <summary>Heightmap options explained</summary>
+                <dl>
+                  <dt>Width and Height</dt><dd>The physical print size in millimeters.</dd>
+                  <dt>White-level height</dt><dd>The height represented by pure white. Black is zero.</dd>
+                  <dt>Detection</dt><dd>Automatic finds direction, spacing and registration. Manual unlocks those values.</dd>
+                  <dt>Registration</dt><dd>Aligns the interlace to the imported lens pattern without changing height samples.</dd>
+                </dl>
+              </details>
+            </div>
+          </details>
+
+          <div class="page-build-bar">
+            <div class="page-build-state"><span>Build status</span><strong class="status-mirror">Ready</strong></div>
+            <div class="page-build-actions"><button id="imagesViewOutputButton" class="button secondary">View output</button><button id="generatePairButton" class="button primary">Generate / Regenerate Both</button></div>
+          </div>
+        </section>
+
+        <section class="page compact-workflow-page" data-page="optics">
+          <div class="page-heading compact-heading"><div><div class="eyebrow">Optical setup</div><h2>Lens and relief geometry</h2><p>Review calculated UV settings, then adjust only the controls needed for your selected mode.</p></div></div>
+
+          <div class="card compact-metrics-card">
+            <div class="metric-grid metric-strip">
+              <div class="metric"><span>Thickness</span><strong id="metricThickness">1.000 mm</strong></div>
+              <div class="metric"><span>Valley</span><strong id="metricBase">0.300 mm</strong></div>
+              <div class="metric"><span>Rise</span><strong id="metricRise">0.700 mm</strong></div>
+              <div class="metric"><span>Viewing angle</span><strong id="metricAngle">44.0 deg</strong></div>
+            </div>
+            <div class="limit-note">Hard printer limit retained: total printed thickness cannot exceed 5.00 mm.</div>
+          </div>
+
+          <div class="optics-responsive-grid">
+            <div class="card compact-card" id="lensSettingsCard">
+              <div class="card-heading"><div><h3>Lens shape & optical base</h3><p>Profile and base controls for Lenticular Lens mode.</p></div></div>
+              <div class="field-grid two">
+                <label class="field span-two"><span>Lens type</span><select id="lensProfile"><option selected>Auto Recommended</option><option>Auto Mathematically Optimal</option><option>Reference Calibrated</option><option>Mathematically Optimal Aspheric</option><option>Aspheric</option><option>Rounded / Circular</option><option>Multi-facet / Prismatic</option><option>Linear / Triangular</option><option>Cosine</option></select></label>
+                <label class="field span-two"><span>Print profile</span><select id="printProfile"><option>Lower Thickness</option><option selected>Recommended (Reference Calibrated)</option><option>Mathematically Optimal</option><option>Higher Thickness</option><option>Manual Thickness</option></select></label>
+                <label class="field conditional-field" id="manualThicknessField"><span>Manual thickness (mm)</span><input id="manualThickness" type="number" min="0" max="5" step="0.001" value="1.0" /></label>
+                <label class="field span-two"><span>Base mode</span><select id="baseMode"><option selected>Recommended (Reference Calibrated)</option><option>Mathematically Optimal</option><option>No base</option><option>Printer minimum</option><option>Raised base</option><option>Manual base height</option></select></label>
+                <label class="field conditional-field" id="manualBaseField"><span>Manual base height (mm)</span><input id="manualBase" type="number" min="0" max="5" step="0.001" value="0.3" /></label>
+              </div>
+            </div>
+
+            <div class="card compact-card" id="resinViewingCard">
+              <div class="card-heading"><div><h3>Resin & viewing</h3><p>Refractive index and viewing-angle target.</p></div></div>
+              <div class="field-grid two">
+                <label class="field"><span>Clear resin IOR</span><input id="ior" type="number" min="1.001" step="0.001" value="1.55" max="3" inputmode="decimal" /></label>
+                <label class="field"><span>Viewing angle</span><select id="viewingAngleMode"><option>Narrow</option><option selected>Standard</option><option>Wide</option><option>Extra Wide</option><option>Custom</option></select></label>
+                <label class="field span-two conditional-field" id="customAngleField"><span>Custom angle (deg)</span><input id="customAngle" type="number" min="1" max="178" step="0.1" value="44.0" /></label>
+              </div>
+            </div>
+
+            <div class="card compact-card hidden" id="reliefSettingsCard">
+              <div class="card-heading"><div><h3>Lens-Free Relief</h3><p>Integrated faceted relief with no separate clear lens.</p></div></div>
+              <label class="field"><span>Prism height (mm)</span><input id="reliefHeight" type="number" min="0.3" max="5" step="0.01" value="0.8" /></label>
+              <div class="info-panel">Facet width, viewing spread and the depth map update with the relief settings.</div>
+            </div>
+
+            <div class="card compact-card" id="backingSettingsCard">
+              <div class="card-heading"><div><h3>Backing / support base</h3><p>This is the separate support block beneath the image or relief, not the optical lens base.</p></div></div>
+              <label class="toggle-field"><input id="backingEnabled" type="checkbox" checked /><span><strong>Enable backing / support base</strong><small>Disable it for tests that need only the optical surface. The thickness is remembered.</small></span></label>
+              <label class="field conditional-field" id="backingThicknessField"><span>Backing thickness (mm)</span><input id="backingMm" type="number" min="0.01" step="0.01" value="5.00" /></label>
+            </div>
+          </div>
+
+          <div class="page-build-bar">
+            <div class="page-build-state"><span>Build status</span><strong class="status-mirror">Ready</strong></div>
+            <div class="page-build-actions"><button id="opticsViewOutputButton" class="button secondary">View output</button><button id="opticsGeneratePairButton" class="button primary">Generate / Regenerate Both</button></div>
+          </div>
+        </section>
+
+        <section class="page" data-page="output">
+          <div class="page-heading"><div><div class="eyebrow">Output</div><h2>Generated files</h2><p>Inspect, regenerate, and export the current production raster pair. The persistent right sidebar provides the only Live 3D Preview.</p></div><div class="page-actions"><button id="outputGeneratePairButton" class="button secondary">Generate / Regenerate Both</button><button id="outputExportBothButton" class="button primary">Export both</button></div></div>
+          <div class="output-asset-grid">
+            <div class="card output-asset-card">
+              <div class="card-heading"><div><h3>Interlaced image</h3><p>Current color raster generated or imported for this project.</p></div></div>
+              <div class="output-image-stage"><img id="outputInterlacedImage" alt="Interlaced output" /><div id="outputInterlacedEmpty" class="preview-message"><strong>No interlaced image</strong><span>Generate or import an interlaced image from the Images page.</span></div></div>
+              <div class="output-path"><span>Current file</span><strong id="resultInterlacedPath">Not generated</strong></div>
+              <div class="action-row"><button id="outputExportInterlacedButton" class="button primary">Export interlaced image</button><button id="outputShowInterlacedButton" class="button ghost">Show file</button></div>
+            </div>
+            <div class="card output-asset-card">
+              <div class="card-heading"><div><h3 id="heightmapOutputTitle">16-bit heightmap / depth map</h3><p>Current geometry raster paired with the interlaced image.</p></div></div>
+              <div class="output-image-stage"><img id="outputHeightmapImage" alt="Heightmap output" /><div id="outputHeightmapEmpty" class="preview-message"><strong>No heightmap</strong><span>Generate the matching heightmap from the Images page.</span></div></div>
+              <div class="output-path"><span>Current file</span><strong id="resultHeightmapPath">Not generated</strong></div>
+              <div class="action-row"><button id="outputExportHeightmapButton" class="button primary">Export heightmap</button><button id="outputShowHeightmapButton" class="button ghost">Show file</button></div>
+            </div>
+          </div>
+          <div class="card labeled-test-card">
+            <div class="card-heading"><div><h3>Labeled Test Print</h3><p>Create a separate test ZIP with the important settings printed below the color image. Clean production outputs are not changed.</p></div><span class="mode-badge">Test only</span></div>
+            <div class="field-grid two">
+              <label class="field"><span>Test name (optional)</span><input id="testOutputName" type="text" maxlength="64" placeholder="Example: Clear resin test 03" /></label>
+              <div class="test-output-summary"><span>Contains</span><strong>Color image + zero-footer heightmap + settings JSON</strong></div>
+            </div>
+            <div class="info-panel">The footer is added below the active image area. Print both TEST images together at the saved physical dimensions / 100% scale. Do not pair a labeled test image with the smaller clean heightmap.</div>
+            <div class="action-row"><button id="exportTestSetButton" class="button primary">Export Labeled Test Set</button></div>
+          </div>
+        </section>
+
+        <section class="page" data-page="calibration">
+          <div class="page-heading"><div><div class="eyebrow">Print testing</div><h2>Calibration coupons</h2><p>Generate print coupons to compare thickness, viewing angle, alignment and lens type.</p></div></div>
+          <div class="card narrow-card">
+            <div class="card-heading"><div><h3>Calibration set</h3><p>Generate the source coupon, 16-bit heightmaps and calibration index.</p></div></div>
+            <div class="field-grid two">
+              <label class="field"><span>Calibration mode</span><select id="calibrationMode"><option selected>Thickness Test</option><option>Viewing Test</option><option>Alignment Test</option><option>Lens Type Test</option></select></label>
+              <label class="field"><span>Coupon size</span><select id="calibrationCouponSize"><option>15 mm</option><option selected>20 mm</option><option>25 mm</option></select></label>
+            </div>
+            <div class="info-panel">Calibration uses the current generated/interlaced image and current optical settings. A folder picker asks where to save the set.</div>
+            <div class="action-row"><button id="calibrationButton" class="button primary">Generate calibration coupons</button></div>
+          </div>
+        </section>
+
+        <section class="page" data-page="blender">
+          <div class="page-heading"><div><div class="eyebrow">3D evaluation</div><h2>Blender integration</h2><p>Connect the project to Blender and prepare portable Blender packages.</p></div></div>
+          <div class="grid two">
+            <div class="card">
+              <div class="card-heading"><div><h3>Shared project</h3><p>Settings and generated images synchronize with the connected Blender project.</p></div></div>
+              <div class="action-row"><button id="syncBlenderButton" class="button primary">Sync to Blender</button><button id="openBlenderButton" class="button secondary">Open current project in Blender</button></div>
+              <div class="status-box"><span>Shared project</span><strong id="projectPathLabel">Preparing session...</strong></div>
+            </div>
+            <div class="card">
+              <div class="card-heading"><div><h3>Project scene</h3><p>The baseline scene includes dedicated image viewers and lens/prism inspection viewports.</p></div></div>
+              <div class="stack-actions"><button id="exportBlenderButton" class="button secondary">Export portable Blender package</button><button id="resetBlenderButton" class="button ghost">Reset project scene from embedded template</button><button id="showAddonButton" class="button ghost">Show Blender add-on package</button></div>
+              <div class="info-panel">Blender add-on: v1.18.43. Updated Blender scene baseline is active, including the dedicated prism and lenticule inspection viewports. Refraction BSDF lens and emission image behavior are retained.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="page help-page" data-page="help">
+          <div class="page-heading"><div><div class="eyebrow">Guide</div><h2>Help & About</h2><p>Practical guidance for creating, previewing, calibrating and exporting Lenticulizer projects.</p></div></div>
+
+          <div class="card help-quickstart">
+            <div class="card-heading"><div><h3>Quick Start</h3><p>A normal source-image project can be completed in this order.</p></div></div>
+            <ol class="help-steps">
+              <li><strong>Add source images.</strong><span>Use 2 to 8 views. Their order controls which image appears as the viewing angle changes.</span></li>
+              <li><strong>Set the final print size.</strong><span>Choose the physical width, height, printer DPI and lens direction.</span></li>
+              <li><strong>Choose an optical settings mode.</strong><span>Automatic is the normal starting point. Semi-Automatic and Manual expose progressively more direct control.</span></li>
+              <li><strong>Generate the image pair.</strong><span>Lenticulizer creates the interlaced image and its matching 16-bit heightmap or depth map together.</span></li>
+              <li><strong>Inspect the preview.</strong><span>Use the image preview and Live 3D Preview to check cropping, orientation, order and the approximate viewing effect.</span></li>
+              <li><strong>Export or send to Blender.</strong><span>Export the finished image pair, or use Blender for more detailed optical and geometry inspection.</span></li>
+            </ol>
+          </div>
+
+          <div class="help-topic-grid">
+            <details class="help-topic" open>
+              <summary>Source images and view order</summary>
+              <div class="help-topic-body">
+                <p>For vertical lenses, source order represents left-to-right viewing. For horizontal lenses, it represents top-to-bottom viewing.</p>
+                <p>Drag cards in the Images page to reorder them. The center image in an odd-numbered set is the straight-on view.</p>
+                <p>If the wrong image appears from an angle, check the source order before changing optical settings.</p>
+              </div>
+            </details>
+
+            <details class="help-topic">
+              <summary>Automatic, Semi-Automatic and Manual</summary>
+              <div class="help-topic-body">
+                <p><strong>Automatic</strong> uses recommended values for the current printer, image count and optical setup.</p>
+                <p><strong>Semi-Automatic</strong> keeps calculated behavior while allowing selected adjustments.</p>
+                <p><strong>Manual</strong> exposes supported optical and geometry values directly. Use it when you are matching a known physical setup or calibration result.</p>
+              </div>
+            </details>
+
+            <details class="help-topic">
+              <summary>LPI, DPI and build quality</summary>
+              <div class="help-topic-body">
+                <p>LPI is the number of lenticules per inch. Printer DPI controls the available raster resolution across those lenticules.</p>
+                <p>Recommended presets choose compatible values automatically. Manual LPI is available when you need to match a known lens or measured print.</p>
+                <p>Higher build detail increases the number of pixels used for each lenticule. It can improve fidelity but also increases processing and file size.</p>
+              </div>
+            </details>
+
+            <details class="help-topic">
+              <summary>Lenticular Lens and Lens-Free Relief</summary>
+              <div class="help-topic-body">
+                <p><strong>Lenticular Lens</strong> creates a printed image plus clear lens geometry intended to refract between views.</p>
+                <p><strong>Lens-Free Relief</strong> creates directional prism or relief geometry without a separate clear lenticular layer.</p>
+                <p>The required image ordering and height/depth output change with the selected mode and direction.</p>
+              </div>
+            </details>
+
+            <details class="help-topic">
+              <summary>Reference heightmap workflow</summary>
+              <div class="help-topic-body">
+                <p>Import a grayscale PNG or TIFF to inspect an existing lens or prism profile. Black represents zero height and white represents the entered white-level height.</p>
+                <p>Verify the physical width, height and white-level height before building. A grayscale image alone cannot reveal its real-world dimensions or absolute height.</p>
+                <p>When detection is uncertain, choose Manual and enter the lens direction, pixels per lens and registration yourself.</p>
+              </div>
+            </details>
+
+            <details class="help-topic">
+              <summary>Live 3D Preview</summary>
+              <div class="help-topic-body">
+                <p>Use the mouse to orbit, pan and zoom the preview. Front returns to the straight-on view. Left and Right change to Top and Bottom when horizontal lens direction is active.</p>
+                <p>The desktop preview is intended for quick visual checking. Blender remains the more detailed geometry and optical inspection environment.</p>
+              </div>
+            </details>
+
+            <details class="help-topic">
+              <summary>Blender integration</summary>
+              <div class="help-topic-body">
+                <p><strong>Sync to Blender</strong> sends the current project state to an already connected Blender project.</p>
+                <p><strong>Open current project in Blender</strong> opens the project using the supplied baseline scene and matching Blender add-on.</p>
+                <p>The authored Blender workspace includes a selected-source viewer, interlaced viewer, height/depth-map viewer, primary 3D viewer and dedicated lens/prism inspection views.</p>
+                <p>Close Project in the add-on disconnects live synchronization. Reconnect or open the project explicitly when you want to resume syncing.</p>
+              </div>
+            </details>
+
+            <details class="help-topic">
+              <summary>Calibration coupons</summary>
+              <div class="help-topic-body">
+                <p>Calibration coupons are small test prints used to compare thickness, viewing angle, alignment or lens profile before committing to a larger print.</p>
+                <p>Use the current project settings as the starting point, print the generated set, then choose the result that gives the best physical viewing behavior.</p>
+              </div>
+            </details>
+
+            <details class="help-topic">
+              <summary>Exported files</summary>
+              <div class="help-topic-body">
+                <p><strong>Interlaced image</strong> is the color raster sent to the printer.</p>
+                <p><strong>Heightmap / depth map</strong> is the matching geometry raster. Lenticulizer preserves the 16-bit heightmap output where applicable.</p>
+                <p><strong>Export both</strong> places the matched production pair in the same selected folder.</p>
+                <p><strong>Portable Blender package</strong> prepares a project package for Blender-based inspection and rendering.</p>
+              </div>
+            </details>
+
+            <details class="help-topic">
+              <summary>Troubleshooting</summary>
+              <div class="help-topic-body">
+                <p><strong>Wrong image from an angle:</strong> verify source order and lens direction.</p>
+                <p><strong>Generated files look stale:</strong> use Generate / Regenerate Both after confirming the current settings.</p>
+                <p><strong>Blender is not updating:</strong> verify that the same project is connected and that Auto Sync is enabled when desired.</p>
+                <p><strong>Imported heightmap looks wrong:</strong> verify physical dimensions, white-level height and detected direction/pitch.</p>
+                <p><strong>Preview differs from print:</strong> use calibration coupons and Blender inspection to validate the physical setup.</p>
+              </div>
+            </details>
+          </div>
+
+          <div class="grid two help-about-grid">
+            <div class="card">
+              <div class="card-heading"><div><h3>About Lenticulizer</h3><p>Version and compatibility information.</p></div></div>
+              <div class="about-table">
+                <span>Application</span><strong id="helpAppVersion">Lenticulizer 3D 3.0.0-alpha.32</strong>
+                <span>Blender add-on</span><strong>Lenticulizer v1.18.43</strong>
+                <span>Blender</span><strong>Blender 5.0 or later for Blender features</strong>
+                <span>Purpose</span><strong>Interlacing, lens/relief geometry, calibration and print output</strong>
+              </div>
+              <p class="help-note">Lenticulizer operates locally. The application does not add analytics or upload your source images.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-heading"><div><h3>Updates</h3><p>Check the authorized GitHub release feed without downloading automatically.</p></div></div>
+              <div class="about-table">
+                <span>Installed</span><strong id="helpInstalledVersion">3.0.0-alpha.32</strong>
+                <span>Latest</span><strong id="helpLatestVersion">Not checked</strong>
+                <span>Status</span><strong id="helpUpdateStatus">Not checked</strong>
+              </div>
+              <div class="action-row"><button id="manualUpdateCheckButton" class="button secondary">Check for updates</button></div>
+              <p class="help-note">Lenticulizer never downloads or restarts automatically. Downloads are verified against the release manifest before installation.</p>
+            </div>
+
+            <div class="card">
+              <div class="card-heading"><div><h3>License & Attributions</h3><p>Concise legal and third-party information.</p></div></div>
+              <div class="legal-summary">
+                <p><strong>Desktop application:</strong> no separate public project license is declared in this build.</p>
+                <p><strong>Blender add-on:</strong> the extension manifest declares GPL-3.0-or-later.</p>
+                <p><strong>Microsoft .NET 10:</strong> distributed under the .NET license with accompanying third-party notices.</p>
+                <p><strong>Microsoft Edge WebView2:</strong> the SDK and bundled Fixed Version Runtime remain subject to Microsoft's license terms and notices.</p>
+                <p><strong>Chromium and other components:</strong> applicable notices are included with the bundled WebView2 runtime.</p>
+                <p><strong>Blender:</strong> Blender is separate software from the Blender Foundation and is not bundled as the Blender application itself. Lenticulizer includes a Blender add-on and baseline project for integration.</p>
+              </div>
+              <button id="helpRuntimeNoticesButton" class="button secondary">Open full runtime licenses and notices</button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <div id="previewSplitter" class="pane-splitter vertical" title="Drag to resize preview"></div>
+
+      <aside class="preview-pane">
+        <div class="preview-header"><div><span class="mini-label">Preview</span><strong id="previewTitle">Project overview</strong></div><div class="preview-tabs"><button id="previewImageTab" class="active">Image</button><button id="preview3dTab">3D</button></div></div>
+        <div class="preview-body">
+          <div id="sideImagePane" class="preview-layer active">
+            <img id="sidePreviewImage" alt="Preview" draggable="false" />
+            <div id="sidePreviewEmpty" class="side-empty"><div class="lens-mark">◫</div><strong>No image selected</strong><span>Add source views or import an interlaced image.</span></div>
+          </div>
+          <div id="side3dPane" class="preview-layer">
+            <canvas id="side3dCanvas"></canvas>
+            <div id="side3dEmpty" class="side-empty"><div class="lens-mark">3D</div><strong>No image available</strong><span>Add source views or import an interlaced image.</span></div>
+            <div class="side3d-controls"><button id="side3dFront">Front</button><button id="side3dLeft">Left</button><button id="side3dRight">Right</button></div>
+          </div>
+        </div>
+        <div class="preview-summary">
+          <div class="summary-row"><span>Mode</span><strong id="summaryMode">Lenticular Lens</strong></div>
+          <div class="summary-row"><span>Size</span><strong id="summarySize">100 × 100 mm</strong></div>
+          <div class="summary-row"><span>LPI / Views</span><strong id="summaryLpiViews">24 / 2</strong></div>
+          <div class="summary-row"><span>Orientation</span><strong id="summaryOrientation">Vertical</strong></div>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="statusbar"><span id="statusMessage">Initializing integrated processing...</span><span class="status-right"><button id="runtimeNoticesButton" class="link-button">Licenses & notices</button> | 3D Self Contained | Blender add-on v1.18.43</span></footer>
+  </div>
+  <script src="bridge.js"></script>
+  <script src="test-output.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>

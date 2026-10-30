@@ -1,0 +1,25 @@
+Lenticulizer 3D Alpha 24 validation
+
+CHANGE
+Import heightmap appears once, in Images / Reference heightmap. The Project
+shortcut and Images heading duplicate were removed with their event bindings.
+The remaining button calls the existing import handler. The app version, build
+filenames and user instructions were updated. Blender add-on v1.18.38 is retained.
+
+EXECUTED FOR THIS RELEASE
+JavaScript syntax check passed. The existing desktop DOM/bridge contract checks
+passed. The HTML contains one heightmap-import button and its event binding is
+present. The removed button identifiers are absent from the HTML and renderer.
+The UI source diff contains only the two removals, event binding and version.
+The processing sources, Blender sources/ZIP, Blender baseline, browser runtime,
+native bridge and styles match Alpha 23 byte for byte.
+The Windows x64 self-contained publish succeeded with no compiler warnings or
+errors. Its publish directory contains a single EXE. All 458 bundle entries
+match the actual build inputs, and bundled .NET/WindowsDesktop 10.0.11 and the
+native single-file host were verified. The app ZIP contains only that EXE and
+its extracted SHA-256 matches the published binary.
+
+LIMITATIONS
+Windows interface execution and live Blender were not run in this Linux build
+environment. The broad processing tests were not rerun for this UI-only change.
+docs/ALPHA_23_VALIDATION.txt records those prior tests for the unchanged core.

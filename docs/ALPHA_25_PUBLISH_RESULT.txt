@@ -1,0 +1,4 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Lenticulizer -> /workspace/scratch/a2bab25053c2/Lenticulizer_v3.0.0-alpha.25_3D_HeightmapDrop/bin/Release/net10.0-windows/win-x64/Lenticulizer_3D.dll
+  Lenticulizer -> /workspace/scratch/a2bab25053c2/Lenticulizer_v3.0.0-alpha.25_3D_HeightmapDrop/publish-alpha25/

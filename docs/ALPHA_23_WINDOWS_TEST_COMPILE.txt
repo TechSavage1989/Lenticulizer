@@ -1,0 +1,7 @@
+  IntegratedAppTests -> /workspace/scratch/a2bab25053c2/Lenticulizer_v3.0.0-alpha.23_3D_HeightmapWorkflow/validation/IntegratedAppTests/bin/Release/net10.0-windows/IntegratedAppTests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.85

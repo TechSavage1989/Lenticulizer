@@ -1,0 +1,25 @@
+Lenticulizer 3D Alpha 27 - License and Attributions
+
+LENTICULIZER DESKTOP APPLICATION
+No separate public desktop-application license is declared in this build.
+
+BLENDER ADD-ON
+The Lenticulizer Blender add-on manifest declares SPDX:GPL-3.0-or-later.
+
+Third-party software and runtime components remain subject to their own terms.
+
+MICROSOFT .NET 10
+Lenticulizer includes the .NET runtime. The bundled notices include the .NET license
+and third-party notices.
+
+MICROSOFT EDGE WEBVIEW2
+Lenticulizer includes the Microsoft Edge WebView2 SDK and Fixed Version Runtime.
+Use of those components is subject to Microsoft's applicable license terms.
+Chromium and other third-party notices are included with the WebView2 runtime.
+
+BLENDER
+Blender is separate software from the Blender Foundation. Lenticulizer does not
+bundle the Blender application. The distribution includes a Blender add-on and
+baseline .blend project for optional Blender integration.
+
+The app's Help page provides a button to open the full bundled runtime notices.

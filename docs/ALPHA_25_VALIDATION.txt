@@ -1,0 +1,48 @@
+Lenticulizer 3D Alpha 25 validation
+
+CHANGE
+Drops anywhere in the desktop app recognize repeating grayscale lens heightmaps
+and explicit Lenticulizer height-scale metadata. The Reference heightmap card
+accepts one grayscale PNG/TIFF even if spacing needs Manual calibration. Mixed
+drops separate one map from source artwork and preserve source order. Multiple
+maps are rejected before project mutation. Source count is limited to eight.
+Native WebView2 file objects carry paths; JavaScript cannot supply a path string
+to the drop endpoint. Imports are serialized, checked against the current project
+and applied as one project update. Pending settings are saved before import.
+The button and drop paths share metadata/calibration settings. File-dialog
+Add source images remains an explicit artwork import. The single Import
+heightmap button is retained. Collapsible help explains all heightmap options.
+
+EXECUTED FOR THIS RELEASE
+119 checks ran against the actual application assembly under Microsoft .NET
+10.0.11 on Linux. They cover PNG map recognition in both orientations, 8/16-bit
+and RGB grayscale, shifted/fractional/long pitches, metadata-labelled flat maps,
+color images, grayscale artwork/interlaces, one-pixel source images, dedicated
+ambiguous-map import, corrupt/missing files, duplicate/multiple maps, mixed order,
+metadata/default dimensions, source-count views, retained settings/modes,
+rebuild intent and immutable original files.
+JavaScript syntax and the existing desktop DOM/bridge checks passed. Actual
+renderer drop functions ran in the Node test harness. Coverage includes all
+three drop zones and global dropping, event bubbling, project-page status,
+reference navigation, native File-object forwarding, internal source reordering,
+sequential drops, failed settings commits and recovery after import errors.
+The processing sources, Blender sources/ZIP, Blender baseline, browser runtime
+and default project match Alpha 24 byte for byte. No Blender update is required.
+The Windows x64 self-contained publish succeeded without compiler warnings or
+errors. Its publish directory contains one EXE. All 458 bundle entries match
+the build inputs. Bundled .NET/WindowsDesktop 10.0.11 and the native host were
+verified. The app ZIP contains only that EXE with an identical SHA-256.
+
+LIMITATIONS
+Windows launch, actual Explorer/WebView2 drag-and-drop, WIC TIFF execution and
+live Blender were not available in this Linux environment. UI event tests use
+API/DOM doubles. The portable harness emits the existing WindowsBase MSB3277
+reference warning because it references a Windows/WPF application; it executes
+only platform-independent code. The app itself publishes cleanly. Broad optical
+parity tests were not rerun for the unchanged core; prior results are retained.
+Automatic recognition is heuristic for unlabelled files. A grayscale artwork
+pattern can resemble a lens, and an unusual map can require explicit import.
+Use Add source images for artwork and the Reference heightmap drop target for
+ambiguous maps. Physical dimensions and white-level height still require review
+when metadata is absent. Import previews the map; Build from heightmap makes it
+the active geometry. Original files remain unchanged.

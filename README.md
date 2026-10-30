@@ -8,79 +8,127 @@
 
 Lenticulizer is a Windows-first desktop tool for preparing lenticular and lens-free relief prints and synchronizing projects with its Blender add-on.
 
-- Source-image ordering and interlaced-image generation.
-- Lenticular Lens and Lens-Free Relief modes.
-- Automatic, Semi-Automatic, and Manual settings modes.
-- LPI, printer-DPI, phase/registration, viewing-angle, IOR, lens/base, and support-backing controls.
-- 16-bit height/depth-map generation and reference-heightmap workflows.
-- Live 3D preview and Blender project synchronization.
-- Calibration outputs.
-- Clean production exports plus optional labeled test-print exports.
+- Order source images and generate interlaced artwork.
+- Build Lenticular Lens or Lens-Free Relief output.
+- Use Automatic, Semi-Automatic, or Manual settings modes.
+- Work with LPI, printer DPI, phase/registration, viewing angle, IOR, lens/base, and optional support-backing controls.
+- Generate and inspect 16-bit height/depth maps, including reference-heightmap workflows.
+- Review a live 3D preview and synchronize the project with Blender.
+- Generate calibration outputs.
+- Export clean production files or a separate labeled test-print set.
+- Use the paired Blender add-on v1.18.43 with Project & Images, Optics & Calibration, and Output tabs.
 
 ## Download
 
-There is **no published GitHub binary release yet**. The repository is still being prepared as the authoritative release/update feed.
+**No Alpha 32 binary has been published yet.** This source snapshot is a development foundation and is not the live update feed.
 
-- [Releases index](https://github.com/TechSavage1989/Lenticulizer/releases)
+- [GitHub releases index](https://github.com/TechSavage1989/Lenticulizer/releases)
 
-The latest confirmed functional baseline is Alpha 31 with Blender add-on v1.18.43. Alpha 32 is the current source-development line for stable packaging and updater work, but it has not been native-Windows validated or published.
+The first repository-backed release must be built and validated on Windows before the app starts relying on GitHub Releases for updates. Do not treat an empty or failed update check as proof that the installed app is current.
+
+
+The Git repository intentionally does not store the roughly 357 MB Fixed Version WebView2 runtime as a normal Git blob. The build restores the pinned 152.0.4191.62 x64 cabinet, verifies its SHA-256, validates every expanded runtime file against the checked-in manifest, checks critical Microsoft signatures, and then recreates the embedded runtime archive. Release source archives may include the restored runtime for offline/reproducible builds.
 
 ## Requirements
 
-Current target:
+For users of a future packaged build:
 
-- Windows x64.
-- Portable/self-contained desktop packaging.
-- Blender 5.0 for optional Blender integration.
+- Windows x64 is the current target.
+- The packaged application is intended to be portable and self-contained.
+- Blender 5.0 is optional and needed only for Blender integration.
 
-The first repository-backed release must complete the Windows/WebView2/updater validation documented in [DEVELOPMENT_HANDOFF.md](DEVELOPMENT_HANDOFF.md).
+For source builds:
+
+- .NET SDK 10.0.400.
+- The included Fixed WebView2 Runtime build assets under `vendor/FixedRuntime/`.
+- `NuGet.Config` pins restore to the official NuGet v3 source so builds do not depend on machine-specific package-source settings.
+- Release/source validation requires Node.js plus Python with `validation/requirements.txt`; they are not runtime dependencies of the packaged Windows application. The current validation environment used Node 22.16.0 and Python 3.13.5.
 
 ## Getting started
 
-No repository-hosted executable is available yet.
+There is no repository-hosted Alpha 32 executable yet. To validate this source on Windows:
 
-For development continuation, read:
+1. Extract the complete source archive.
+2. Install or make available .NET SDK 10.0.400.
+3. Run `Build_SelfContained.bat` from the source root.
+4. The build performs its required checks and writes the stable executable to `dist\Lenticulizer.exe`.
+5. Release packaging writes `Lenticulizer_Windows_Portable.zip`, `update-manifest.json`, and `SHA256SUMS.txt` under `release\`.
 
-1. [AGENTS.md](AGENTS.md)
-2. [DEVELOPMENT_HANDOFF.md](DEVELOPMENT_HANDOFF.md)
-3. [Alpha 31 baseline](docs/releases/alpha31-baseline.md)
-4. [Alpha 32 updater foundation](docs/releases/alpha32-updater-foundation.md)
+A local build is not automatically a release candidate. Complete the Windows updater and launch checks documented in `DEVELOPMENT_HANDOFF.md` first.
 
 ## How to use
 
-The established workflow is:
-
 1. Add and order source images.
 2. Choose Lenticular Lens or Lens-Free Relief.
-3. Set print dimensions, lens direction, LPI, printer DPI, and phase/registration.
-4. Review calculated optical settings and adjust only the controls allowed by the selected settings mode.
+3. Set print size, lens direction, LPI, printer DPI, and phase/registration.
+4. Review the calculated optical settings and adjust the controls available in the selected settings mode.
 5. Generate the interlaced image and height/depth map.
 6. Review the live 3D preview or synchronize the project to Blender.
-7. Export clean production files, calibration outputs, or an optional labeled test set.
+7. Export production files, calibration outputs, or an optional labeled test set.
+
+Normal production exports stay clean. Labeled test output is generated separately so test settings do not become part of production artwork or raised heightmap geometry.
 
 ## Updates and settings
 
-Alpha 32 source now contains the updater foundation, but the GitHub release feed is **not live yet**.
+Alpha 32 source introduces the repository-backed updater foundation. It is **not yet a published or native-Windows-validated update feed**.
 
-The source design includes startup, five-minute, and focus-return checks; ETags/caching; rate-limit/backoff handling; explicit offline/error states; user-controlled Download and Install and restart actions; package/hash/identity validation; safe staging; one rollback; and UI-health-confirmed relaunch.
+Designed behavior:
 
-New packaged builds use the stable filename `Lenticulizer.exe`. Mutable state is designed to remain under the current user's local application data rather than beside the executable.
+- Check in the background at startup.
+- Check every five minutes while the app is running and on focus return when at least two minutes have passed.
+- Use single-flight requests, ETags, cached release metadata, manual-check cooldowns, and GitHub rate-limit/backoff information.
+- Report offline or failed checks as unavailable/errors rather than “up to date.”
+- Never download or restart automatically.
+- Show explicit **Download** and **Install and restart** actions.
+- Verify the release manifest, expected package SHA-256, archive layout, Windows PE identity, product identity, and version before installing.
+- Stage safely, retain one rollback executable, and restore it if the new app does not complete its UI health handshake.
 
-A SHA-256 match verifies bytes against the release manifest; it is not publisher signing.
+A SHA-256 match verifies bytes against the release manifest; it is **not publisher code signing**.
+
+New packages use the stable filename `Lenticulizer.exe`. In-place updates preserve the executable path already used by the current installation so an older custom/versioned shortcut is not silently broken.
+
+Mutable state is kept under the current Windows user's local application data, including:
+
+- `Lenticulizer\Settings`
+- `Lenticulizer\Logs`
+- `Lenticulizer\Runtime`
+- `Lenticulizer\WebView2`
+- `Lenticulizer\Sessions`
+- `Lenticulizer\Updates`
 
 ## Troubleshooting
 
-Until the first repository-backed release is published:
-
-- Do not assume the Releases page contains the current application.
-- Preserve a known-good Alpha 31 rollback while Alpha 32 is compiled and native-tested.
-- Alpha 31 has no updater, so the first move to a compiled Alpha 32 build must be manual.
-- Keep desktop and Blender add-on versions paired as documented.
+- **No update is shown:** the GitHub release feed is not live until a compatible release with the required manifest/assets is published. Offline or failed checks should say so explicitly.
+- **Update cannot restart:** finish any active build, file dialog, or Blender action before using **Install and restart**.
+- **A new version fails to open:** the updater is designed to restore the one retained previous executable when the new version does not report a healthy UI startup.
+- **Blender behavior differs:** keep the desktop app and documented add-on version paired. The current source baseline uses Blender add-on v1.18.43 and the Project(6) Blender scene baseline.
 
 ## Development
 
-Read [AGENTS.md](AGENTS.md) and [DEVELOPMENT_HANDOFF.md](DEVELOPMENT_HANDOFF.md) first.
+Read these first:
 
-The public repository intentionally remains documentation-only until application-source publication is explicitly authorized. The Alpha 32 source foundation has been reconstructed and source/static validated privately, including the archive/root guard and updater contract checks.
+- [AGENTS.md](AGENTS.md)
+- [DEVELOPMENT_HANDOFF.md](DEVELOPMENT_HANDOFF.md)
+- [Alpha 31 baseline](docs/releases/alpha31-baseline.md)
+- [Alpha 32 updater foundation](docs/releases/alpha32-updater-foundation.md)
+- [Prepared CI validation](docs/CI.md)
+
+Primary source checks available in an extracted archive without `.git`:
+
+```text
+node validation/BridgeTests.js
+node validation/DropUiTests.js
+python validation/DesktopHeightmapContractChecks.py
+python validation/HeightmapFixtures.py
+python validation/BlenderHeightmapChecks.py
+python validation/Alpha32FoundationChecks.py
+python validation/UpdaterContractChecks.py
+python validation/RootGuardChecks.py
+python validation/SourceArchiveChecks.py
+```
+
+`validation/RootGuardChecks.py` includes a clean-tree check and an isolated unapproved-root-file negative control.
+
+The current recovery environment could not perform a fresh .NET compile or Windows/WebView2/live-Blender validation. See the handoff for the exact remaining release gates.
 
 No repository license has been established, so this README does not claim one.

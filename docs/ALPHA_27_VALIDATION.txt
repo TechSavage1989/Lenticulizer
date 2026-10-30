@@ -1,0 +1,11 @@
+Lenticulizer 3D Alpha 27 source validation
+
+PASS - Blender add-on v1.18.39 Python source compiles.
+PASS - Desktop renderer.js and bridge.js syntax checks pass under Node.
+PASS - Help page IDs and navigation are present in embedded index.html.
+PASS - App source references embedded Blender add-on v1.18.39.
+PASS - Existing Alpha 26 application workflow source is otherwise retained.
+
+The Windows self-contained executable was not compiled in this Linux environment.
+Build it on Windows with Microsoft .NET SDK 10.0.400. The verified Alpha 26
+Fixed Version WebView2 runtime.zip is included in this build-ready source package.

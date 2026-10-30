@@ -1,0 +1,34 @@
+{
+  "version": "3.0.0-alpha.23",
+  "addon_version": "1.18.38",
+  "platform": "Windows x64",
+  "sdk": "10.0.400",
+  "runtime": "10.0.11",
+  "browser": "152.0.4191.62",
+  "binary": {
+    "name": "Lenticulizer_3D_v3.0.0-alpha.23_SelfContained.exe",
+    "bytes": 551018581,
+    "sha256": "1584455e69ae790071849400d08741622cdd7fb1cbfcc815541a2b6a2936c0e3"
+  },
+  "addon": {
+    "name": "Lenticulizer_3D_Blender_Addon_v1.18.38.zip",
+    "bytes": 90439,
+    "sha256": "50778369bb3c4509ecbdf3152f5d3b6c5157a65768a14a78ba0c76f4dcc664f4"
+  },
+  "baseline_sha256": "d7b990361cbbaa57581e7f333b229ffb408b517123e1adf60b7a36aa6bfa92e8",
+  "runtime_archive_sha256": "080eb10f2d59fc1a6603113f9412243e5a99b663886c789c9770eadbc5580763",
+  "runtime_archive_bytes": 374481976,
+  "runtime_files": 557,
+  "validation": {
+    "heightmap_checks": 57512,
+    "existing_runtime_checks": 48647,
+    "optical_cases": 360,
+    "png16_pixel_matches": 360,
+    "heightmap_fixtures": 30,
+    "addon_api_double_checks": 33,
+    "exe_bundle_entries": 458,
+    "windows_integration_compiled": true,
+    "windows_gui_executed": false,
+    "live_blender_executed": false
+  }
+}

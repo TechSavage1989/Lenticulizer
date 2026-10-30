@@ -1,0 +1,8 @@
+node --check ui/src/renderer.js
+node --check ui/src/bridge.js
+node validation/BridgeTests.js
+PASS: WebView2 bridge checks: out-of-order replies, settings/rebuild intent, project binding, startup update buffering, errors, native dropped files, special-character asset URLs and shutdown.
+node validation/DropUiTests.js
+PASS: actual drop UI handlers: automatic/dedicated routing, native File objects, bubbling, project-page status, reference navigation, internal reorder, gesture order and error recovery.
+python3 validation/DesktopHeightmapContractChecks.py
+PASS: desktop DOM and bridge wiring; Front default with preserved rotation; extension identity, manifest and bundled Python source consistency.

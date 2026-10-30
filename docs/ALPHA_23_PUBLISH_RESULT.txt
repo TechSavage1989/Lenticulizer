@@ -1,0 +1,2 @@
+  Lenticulizer -> /workspace/scratch/a2bab25053c2/Lenticulizer_v3.0.0-alpha.23_3D_HeightmapWorkflow/bin/Release/net10.0-windows/win-x64/Lenticulizer_3D.dll
+  Lenticulizer -> /workspace/scratch/a2bab25053c2/Lenticulizer_v3.0.0-alpha.23_3D_HeightmapWorkflow/publish-alpha23/

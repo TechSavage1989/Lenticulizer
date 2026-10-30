@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "revision": 1,
+  "changed_by": "preview",
+  "assets": {
+    "interlaced_image": "",
+    "heightmap": "",
+    "source_frames": []
+  },
+  "settings": {
+    "mode": "Automatic",
+    "output_mode": "Lenticular Lens",
+    "relief_prism_height_mm": 0.8,
+    "workflow": "Build from source frames",
+    "width_mm": 100,
+    "height_mm": 100,
+    "lpi": 24,
+    "lpi_helper_mode": "Recommended",
+    "lpi_helper_preset": "Balanced",
+    "views": 2,
+    "printer_dpi": 1440,
+    "build_detail_mode": "Auto from printer DPI",
+    "pixels_per_lenticule": 60,
+    "orientation": "Vertical",
+    "lens_profile": "Auto Recommended",
+    "print_profile": "Recommended (Reference Calibrated)",
+    "manual_thickness_mm": 1,
+    "base_mode": "Recommended (Reference Calibrated)",
+    "manual_base_mm": 0.3,
+    "thickness_mm": 1,
+    "base_mm": 0.3,
+    "rise_mm": 0.7,
+    "viewing_angle_mode": "Standard",
+    "custom_viewing_angle_deg": 44,
+    "viewing_angle_deg": 44,
+    "ior": 1.55,
+    "backing_mm": 5,
+    "phase_pitch": 0,
+    "backing_enabled": true,
+    "backing_saved_mm": 5.0
+  }
+}

@@ -1,9 +1,23 @@
 # Continuous integration
 
-Alpha 32 private source contains a prepared Windows validation workflow. It is intentionally not published or active in this documentation-only repository because application-source publication has not been authorized.
+The prepared Windows CI workflow is `.github/workflows/ci.yml`.
 
-The prepared workflow validates source/root checks, JavaScript and Python contracts, explicit NuGet restores, .NET build/parity tests, self-contained publish, embedded-core/runtime verification, and source-archive construction.
+It is intentionally a **validation workflow only**. It does not create a GitHub release, push tags, upload release binaries, change repository visibility, or require repository secrets.
 
-It does not publish a GitHub release, push tags, upload release binaries, change repository visibility, or require secrets.
+When application source publication is authorized, the workflow is intended to verify:
 
-Interactive Windows/WebView2 update install/relaunch/rollback and live Blender behavior remain separate release gates and are not treated as proven by hosted CI.
+- root/source layout and negative-control guard;
+- JavaScript bridge/UI checks;
+- Python raster/Blender/updater/source-package contracts;
+- .NET restore through the repository `NuGet.Config`;
+- application build;
+- .NET parity tests;
+- self-contained publish;
+- embedded-core and bundled-runtime verification;
+- source-archive construction.
+
+The workflow deliberately does **not** run the interactive Windows UI/updater install/relaunch test. GitHub-hosted CI is not treated as proof of an interactive desktop experience. Native WebView2 focus/timer/update-install/rollback and live Blender validation remain explicit release gates in `DEVELOPMENT_HANDOFF.md`.
+
+Do not add release publication or credential-bearing steps without explicit authorization.
+
+The Git checkout does not contain the large `vendor/FixedRuntime/runtime.zip`. CI first runs `Restore_Build_Assets.bat`, which downloads the pinned 152.0.4191.62 x64 Fixed Version cabinet, verifies the cabinet and full expanded file set against the checked-in baseline manifest, validates critical Microsoft signatures, and rebuilds the runtime archive before source/build tests.

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 456 456">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #3f7cff;
+      }
+
+      .cls-2 {
+        stroke: #fff;
+        stroke-width: 5px;
+      }
+
+      .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8 {
+        fill: none;
+      }
+
+      .cls-2, .cls-3, .cls-5, .cls-6 {
+        stroke-linecap: round;
+      }
+
+      .cls-3 {
+        stroke: #3f7cff;
+      }
+
+      .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8 {
+        stroke-width: 6px;
+      }
+
+      .cls-3, .cls-5, .cls-6 {
+        opacity: .85;
+      }
+
+      .cls-9 {
+        fill: #f04444;
+      }
+
+      .cls-4 {
+        stroke: #f3fbff;
+        stroke-linejoin: round;
+      }
+
+      .cls-5 {
+        stroke: #f04444;
+      }
+
+      .cls-10 {
+        mask: url(#mask);
+      }
+
+      .cls-6 {
+        stroke: #38d26b;
+      }
+
+      .cls-11 {
+        fill: #38d26b;
+      }
+
+      .cls-12 {
+        filter: url(#softGlow);
+      }
+
+      .cls-7 {
+        stroke: #2fa7ff;
+      }
+
+      .cls-8 {
+        stroke: #d8f3ff;
+      }
+
+      .cls-13 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-14 {
+        filter: url(#luminosity-noclip);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="-729.46" y1="768.38" x2="-728.46" y2="767.38" gradientTransform="translate(332633 350381) scale(456 -456)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#101820"/>
+      <stop offset="1" stop-color="#1a2633"/>
+    </linearGradient>
+    <filter id="luminosity-noclip" x="96" y="353" width="264" height="26" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feFlood flood-color="#fff" result="bg"/>
+      <feBlend in="SourceGraphic" in2="bg"/>
+    </filter>
+    <mask id="mask" x="96" y="353" width="264" height="26" maskUnits="userSpaceOnUse">
+      <g class="cls-14">
+        <image width="264" height="26" transform="translate(96 353)" xlink:href="data:image/png;base64,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"/>
+      </g>
+    </mask>
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur result="blur" stdDeviation="3"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <g id="background">
+    <rect class="cls-13" width="456" height="456" rx="92" ry="92"/>
+    <rect class="cls-7" x="3" y="3" width="450" height="450" rx="89" ry="89"/>
+  </g>
+  <g id="lens-sheet">
+    <rect class="cls-8" x="58" y="264" width="340" height="82" rx="6" ry="6"/>
+    <path id="lens-1" class="cls-4" d="M58,264c12-60,38-112,85-112s73,52,85,112H58Z"/>
+    <path id="lens-2" class="cls-4" d="M143,264c12-60,38-112,85-112s73,52,85,112h-170Z"/>
+    <path id="lens-3" class="cls-4" d="M228,264c12-60,38-112,85-112s73,52,85,112h-170Z"/>
+    <line class="cls-2" x1="68" y1="327" x2="388" y2="327"/>
+  </g>
+  <g id="image-strips">
+    <g class="cls-10">
+      <g>
+        <rect class="cls-9" x="98" y="355" width="78" height="22" rx="6" ry="6"/>
+        <rect class="cls-11" x="189" y="355" width="78" height="22" rx="6" ry="6"/>
+        <rect class="cls-1" x="280" y="355" width="78" height="22" rx="6" ry="6"/>
+      </g>
+    </g>
+  </g>
+  <g id="rays" class="cls-12">
+    <polyline class="cls-5" points="137 355 143 255.31 104 57.82"/>
+    <polyline class="cls-6" points="228 355 228 255.31 228 37.13"/>
+    <polyline class="cls-3" points="319 355 313 255.31 352 57.82"/>
+  </g>
+</svg>

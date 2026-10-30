@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>false</EnableCompressionInSingleFile>
+    <PublishTrimmed>false</PublishTrimmed>
+    <PublishReadyToRun>false</PublishReadyToRun>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <AllowedReferenceRelatedFileExtensions>.pdb</AllowedReferenceRelatedFileExtensions>
+    <AssemblyName>Lenticulizer</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ApplicationIcon>backend/Lenticulizer.ico</ApplicationIcon>
+    <ApplicationManifest>app/app.manifest</ApplicationManifest>
+    <RuntimeFrameworkVersion>10.0.11</RuntimeFrameworkVersion>
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="app/*.cs;compat/*.cs;backend/Core/*.cs" Exclude="backend/Core/AssemblyInfo.cs" />
+    <EmbeddedResource Include="app/default-project.json" LogicalName="Lenticulizer.DefaultProject.json" />
+    <EmbeddedResource Include="backend/Lenticular-Builder.blend" LogicalName="Lenticulizer.BlenderTemplate.blend" />
+    <EmbeddedResource Include="validation/WindowsUiChecks.js" LogicalName="Lenticulizer.WindowsUiChecks.js" />
+    <EmbeddedResource Include="blender/Lenticulizer_3D_Blender_Addon_v1.18.43.zip" LogicalName="Lenticulizer.BlenderAddon.zip" />
+    <EmbeddedResource Include="vendor/FixedRuntime/runtime.zip" LogicalName="Lenticulizer.FixedRuntime.zip" />
+    <EmbeddedResource Include="vendor/FixedRuntime/manifest.json" LogicalName="Lenticulizer.FixedRuntime.json" />
+    <EmbeddedResource Include="ui/src/index.html" LogicalName="Lenticulizer.UI.src.index.html" />
+    <EmbeddedResource Include="ui/src/bridge.js" LogicalName="Lenticulizer.UI.src.bridge.js" />
+    <EmbeddedResource Include="ui/src/renderer.js" LogicalName="Lenticulizer.UI.src.renderer.js" />
+    <EmbeddedResource Include="ui/src/test-output.js" LogicalName="Lenticulizer.UI.src.test-output.js" />
+    <EmbeddedResource Include="ui/src/app.css" LogicalName="Lenticulizer.UI.src.app.css" />
+    <EmbeddedResource Include="ui/assets/Lenticulizer.ico" LogicalName="Lenticulizer.UI.assets.Lenticulizer.ico" />
+    <EmbeddedResource Include="ui/assets/Lenticulizer_Icon_Source.svg" LogicalName="Lenticulizer.UI.assets.Lenticulizer_Icon_Source.svg" />
+    <EmbeddedResource Include="vendor/WebView2/LICENSE.txt" LogicalName="Lenticulizer.WebView2.LICENSE.txt" />
+    <EmbeddedResource Include="vendor/WebView2/NOTICE.txt" LogicalName="Lenticulizer.WebView2.NOTICE.txt" />
+    <Reference Include="Microsoft.Web.WebView2.Core">
+      <HintPath>vendor/WebView2/Microsoft.Web.WebView2.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.WebView2.WinForms">
+      <HintPath>vendor/WebView2/Microsoft.Web.WebView2.WinForms.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

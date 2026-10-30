@@ -1,0 +1,30 @@
+Lenticulizer 3D Alpha 26 validation
+
+CHANGE
+The shared Blender launch helper sets CreateNoWindow=true with
+UseShellExecute=false. This requests Windows CREATE_NO_WINDOW behavior for
+Blender's console. WindowStyle remains normal; no background-rendering flag is
+added. Open Project and Reset Project Scene both use this launch helper.
+Executable selection, quoted scene argument, working directory, handoff files,
+launch-error handling and Blender synchronization are unchanged.
+The app version, release filenames and instructions were updated.
+
+VERIFICATION
+The source diff was reviewed and confirms that the only launch change is the
+CreateNoWindow setting plus its explanatory comment. The Windows x64
+self-contained build published without compiler warnings or errors. Its publish
+directory contains a single EXE. All 458 bundle entries match the build inputs,
+including bundled .NET/WindowsDesktop 10.0.11 and the native host. The app ZIP
+contains only the EXE and its extracted SHA-256 matches the published binary.
+The processing sources, Blender add-on sources/ZIP, Blender baseline, browser
+runtime, bridge and styling match Alpha 25 byte for byte. Add-on v1.18.38 is
+retained. No additional processing tests were run for this launch-setting change.
+Previous validation results remain available under their original version names.
+
+LIMITATION
+Actual Blender launch and Windows console behavior were not executed in this
+Linux environment. Windows launch verification remains a local check.
+
+Platform reference:
+https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.processstartinfo.createnowindow?view=net-10.0
+https://learn.microsoft.com/en-us/windows/win32/procthread/process-creation-flags

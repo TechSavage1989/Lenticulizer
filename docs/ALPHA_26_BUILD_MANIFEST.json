@@ -1,0 +1,20 @@
+{
+  "version": "3.0.0-alpha.26",
+  "based_on": "3.0.0-alpha.25",
+  "change": "Suppress the Windows console when opening a Blender project",
+  "addon_version": "1.18.38",
+  "binary": {
+    "name": "Lenticulizer_3D_v3.0.0-alpha.26_SelfContained.exe",
+    "bytes": 551030869,
+    "sha256": "2e4d0568e606b66b427e71e7c7c05b75fd985dd2e9be4caef7123af0e5e9a7f4"
+  },
+  "validation": {
+    "publish_succeeded": true,
+    "launch_diff_reviewed": true,
+    "windows_blender_launch_executed": false,
+    "bundle_entries": 458,
+    "windows_gui_executed": false,
+    "live_blender_executed": false,
+    "core_tests_rerun": false
+  }
+}

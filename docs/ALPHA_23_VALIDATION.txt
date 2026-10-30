@@ -1,0 +1,79 @@
+Lenticulizer 3D Alpha 23 validation - 2026-09-07
+
+EXECUTED
+Microsoft .NET SDK 10.0.400 published one Windows x64 self-contained EXE.
+No compiler warning or error appears in the publish log. The clean publish
+folder contains only Lenticulizer_3D.exe. The managed processing code executes
+inside this application assembly, with no external processing DLL/process.
+
+The actual application assembly passed 57,512 heightmap checks plus 48,647
+existing runtime/compatibility checks under Microsoft .NET 10.0.11 on Linux.
+The 30 shared PNG fixtures cover vertical/horizontal orientation, shifted phase,
+integer/fractional pitch, wide rasters, long pitch, all five PNG filters, 8/16-bit
+samples, grayscale RGB, flat/grid/noisy inputs, metadata and source preservation.
+Python/C# analysis and per-pixel view assignment agree. Settings tests cover
+physical scale, raw range, source-count views, partial solve, shared round-trip,
+manual override and generation fingerprints. Physical source cropping accounts
+for unequal X/Y map DPI. Original lens algorithms remain authoritative for the
+procedural workflow; OpticalEngine.cs is unchanged from Alpha 22.
+
+All 360 original optical cases match exactly without numeric tolerance. All 360
+decoded PNG16 pixel arrays match the prior reference. PNG metadata now contains
+the white-level height, so full PNG file bytes differ while samples stay exact.
+
+Actual C# TIFF output copies were decoded by Pillow. Both little-endian and
+big-endian fixtures preserve every sample and existing descriptions while their
+new metadata records width, height and white-level scale. Original pixel strips,
+tiles and existing directory bytes remain in place. Original imports are unchanged.
+Python TIFF copies passed the corresponding sample/metadata checks.
+
+The Blender add-on passed 33 tests using Blender API doubles. These exercise
+actual callbacks, project serialization and reading, scalar normalization,
+horizontal mesh sample order, reference-only changes, rebuild intent, immutable
+exports and the actual NumPy raster builder/PNG writer. This is not a Blender
+viewport or installation test. No viewport rearrangement or inspection-framing
+function was changed. The accepted baseline SHA-256 remains:
+d7b990361cbbaa57581e7f333b229ffb408b517123e1adf60b7a36aa6bfa92e8
+
+JavaScript syntax, native bridge tests, DOM/control references, Front initial
+state, view-preserving update path, extension manifest/identity and ZIP/source
+consistency passed. The add-on ZIP contains only its manifest, two Python source
+modules and README. It includes no cached bytecode.
+
+The SDK HostModel bundle inspection validated all 458 final EXE entries against
+the build inputs. The native host code matches the pinned Microsoft singlefilehost;
+the CLR/JIT are statically linked. Runtime configuration declares bundled .NET
+and WindowsDesktop 10.0.11, with no installed-framework request. All 557 files in
+the fixed browser/runtime payload were extracted and SHA-256 verified. WPF/WIC
+imaging assemblies are bundled for Windows TIFF decoding. The complete browser
+runtime is retained rather than removing unverified dependencies.
+
+The Windows integration harness compiles against this exact application assembly
+with zero warnings and zero errors. Its Main entry point is STA. It includes
+complete imported-map pipelines, WIC TIFF metadata, stripe-pixel comparisons,
+source preservation, registration and display-only updates.
+
+LIMITATIONS
+Windows apphost launch, Windows GDI+/WIC execution, WebView2 rendering and dialogs,
+and live Blender viewport/extension installation were not executed here. They
+require Windows/Blender, unavailable in this Linux build environment. The actual
+Windows integration suite and built-in --verify-ui checks are included for them.
+A compiled test is not counted as an executed Windows test.
+
+The Linux-only runtime harness emits an MSB3277 WindowsBase reference warning
+because it references a Windows/WPF application from a portable test target. It
+executes only platform-independent members. The application and Windows test
+project compile cleanly. The final bundle's Windows assemblies are verified.
+
+Automatic detection requires repeating one-dimensional lens/prism profiles.
+It cannot recover source artwork, view count, missing physical dimensions,
+absolute height or a measured viewing angle. Review scale fields and use Manual
+for ambiguous detection. Reference geometry previews extrude a center scanline;
+the exported heightmap preserves all imported samples. Standard TIFF is supported;
+convert BigTIFF before building. Desktop transparent/tinted modes are inspection
+shading, not a full optical ray tracer.
+
+EXE: Lenticulizer_3D_v3.0.0-alpha.23_SelfContained.exe
+Bytes: 551018581
+SHA-256: 1584455e69ae790071849400d08741622cdd7fb1cbfcc815541a2b6a2936c0e3
+Add-on SHA-256: 50778369bb3c4509ecbdf3152f5d3b6c5157a65768a14a78ba0c76f4dcc664f4

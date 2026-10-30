@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "app_id": "techsavage1989.lenticulizer",
+  "version": "3.0.0-alpha.32",
+  "exe_name": "Lenticulizer.exe",
+  "package": {
+    "name": "Lenticulizer_Windows_Portable.zip",
+    "sha256": "REPLACE_WITH_64_HEX_SHA256",
+    "size": 0
+  },
+  "notes": [
+    "Example release note bullet."
+  ],
+  "read_more_url": "https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.32"
+}

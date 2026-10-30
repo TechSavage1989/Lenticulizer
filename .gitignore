@@ -1,0 +1,20 @@
+# Build output
+bin/
+obj/
+dist/
+release/
+.vs/
+
+# Generated validation/runtime files
+__pycache__/
+*.pyc
+*.pyo
+*.tmp
+*.part
+validation/Last_*
+validation/heightmap-fixtures/copy_*
+validation/heightmap-fixtures/*_copy.tif
+validation/heightmap-fixtures/*_csharp.tif
+
+# Large vendored runtime is restored from a pinned, verified Fixed Version cabinet.
+vendor/FixedRuntime/runtime.zip

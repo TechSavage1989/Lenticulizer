@@ -1,41 +1,39 @@
 # Alpha 32 updater foundation
 
-Alpha 32 is the source-development line following the confirmed Alpha 31 behavior baseline. It is not yet a published Windows release.
+Alpha 32 is the source-development line that follows the confirmed Alpha 31 behavior baseline. It is not yet a published Windows release.
 
 ## Scope
 
 - Stable new-package executable name: `Lenticulizer.exe`.
-- Per-user window/update state.
+- Per-user window/update state rather than mutable state beside the executable.
 - GitHub Releases update-check/download/install foundation.
 - Explicit user-controlled download and restart.
-- Manifest/hash/archive/PE/product/version validation.
+- Package/hash/identity validation.
 - Same-filesystem replacement staging and one rollback executable.
 - UI-health-confirmed relaunch with rollback on failure.
 - Release-manifest/package generation helper.
-- Archive-compatible root-layout guard and negative control.
-- Reproducible source-archive packager with SHA-256 file manifest and generated-artifact exclusions.
-- Repository `NuGet.Config` that explicitly restores from the official NuGet v3 source.
+- Root-layout allowlist and archive-compatible guard.
 
 ## Compatibility
 
-Application processing behavior, Blender add-on v1.18.43, Project(6) baseline, and Alpha 31 labeled-test outputs are intended to remain unchanged.
+Application behavior, image processing, Blender add-on v1.18.43, Project(6) baseline, and Alpha 31 labeled-test outputs are intended to remain unchanged.
 
-Alpha 31 has no updater, so the first move to Alpha 32 must be manual.
+Alpha 31 has no updater, so the first move to Alpha 32 must be manual. After Alpha 32, updates can use the new mechanism once a compatible GitHub release feed is actually published and validated.
 
 ## Release format
 
-A compatible release must contain:
+A compatible release must contain these assets:
 
 - `Lenticulizer_Windows_Portable.zip`
 - `update-manifest.json`
 - `SHA256SUMS.txt`
 
-The update ZIP contains only `Lenticulizer.exe`. The manifest identifies `techsavage1989.lenticulizer`, exact version, package name, byte count, and SHA-256.
+The portable update ZIP contains only `Lenticulizer.exe`. The manifest identifies `techsavage1989.lenticulizer`, the exact version, package name, package byte count, and package SHA-256.
 
-A matching SHA-256 verifies integrity against release metadata; it is not code signing.
+A matching SHA-256 is integrity verification against the release manifest, not code signing.
 
 ## Validation status
 
-Private source/static parity, updater contract, unsafe-archive negative controls, root-clutter negative control, source-archive plan checks, and the embedded archive SHA-256 manifest pass from a fresh extracted source archive without `.git`.
+Source/static parity, updater contract, unsafe-archive negative controls, and root-clutter negative control pass in the current reconstruction environment.
 
-Fresh .NET compilation, native Windows/WebView2 launch, real GitHub update/relaunch/rollback, and live Blender validation remain release gates.
+A fresh .NET build, native Windows launch, real GitHub update cycle, rollback process test, live WebView2 behavior, and live Blender validation remain release gates.
