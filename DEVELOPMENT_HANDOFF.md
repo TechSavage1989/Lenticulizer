@@ -63,6 +63,10 @@ The compiled stable executable supports `--package-release <directory>` and crea
 
 The updater ZIP contains only root `Lenticulizer.exe`.
 
+### Prepared CI
+
+The private Alpha 32 source contains a validation-only Windows CI workflow. It performs source checks, explicit NuGet restores, .NET build/parity tests, self-contained publish, embedded-core/runtime verification, and source-archive construction. It does not publish releases or upload release binaries, and it has not run on GitHub because application-source publication is not authorized.
+
 ### Root/source guard
 
 The private source contains a reviewed root allowlist, archive-compatible guard, clean-tree test, and isolated unapproved-root-file negative control.
@@ -96,7 +100,7 @@ The Alpha 32 source snapshot passed the available non-.NET checks after a fresh 
 
 Private Alpha 32 source snapshot SHA-256:
 
-`fa20464d3add72707eee76ad9b3e811e73a59fc5ecdb3d1f5cd66c877c1628b8`
+`cf42468e8a51bce8fbc05150c58599bb8276ca28be5e92ca6035871fdec6ce56`
 
 Not performed in this environment:
 
