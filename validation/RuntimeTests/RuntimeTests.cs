@@ -146,7 +146,7 @@ internal static class RuntimeTests
             Check(JsonSerializer.Deserialize<RuntimeManifest>(input).archive_sha256==manifest.archive_sha256,"Source build manifest export");
         string cache=BundledRuntime.PrepareCache(Path.Combine(temporary,"real-runtime"),manifest,()=>app.GetManifestResourceStream("Lenticulizer.FixedRuntime.zip"),null,CancellationToken.None,true);
         Check(BundledRuntime.Ready(cache,manifest,true,CancellationToken.None),"All real bundled runtime file hashes verified");
-        foreach(string file in new[]{"browser/msedgewebview2.exe","WebView2Loader.dll","Lenticular-Builder.blend","blender/Lenticulizer_Blender_Addon_v1.18.43.zip","notices/Runtime-Notices.txt"})
+        foreach(string file in new[]{"browser/msedgewebview2.exe","WebView2Loader.dll","Lenticular-Builder.blend","blender/Lenticulizer_3D_Blender_Addon_v1.18.43.zip","notices/Runtime-Notices.txt"})
             Check(File.Exists(BundledRuntime.Target(cache,file)),"Bundled runtime resource: "+file);
         Console.WriteLine("PASS: extracted and verified "+manifest.files.Count+" actual bundled files, including browser "+manifest.version+".");
     }

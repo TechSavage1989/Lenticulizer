@@ -35,8 +35,9 @@ with zipfile.ZipFile(addon_zip) as z:
 
 # Runtime tests must verify the same current add-on embedded in the desktop app.
 runtime_tests=(root/'validation/RuntimeTests/RuntimeTests.cs').read_text(encoding='utf-8')
-assert 'blender/Lenticulizer_Blender_Addon_v1.18.43.zip' in runtime_tests
+assert 'blender/Lenticulizer_3D_Blender_Addon_v1.18.43.zip' in runtime_tests
 assert 'blender/Lenticulizer_Blender_Addon_v1.18.38.zip' not in runtime_tests
+assert 'blender/Lenticulizer_3D_Blender_Addon_v1.18.43.zip' in [item['path'] for item in json.loads((root/'vendor/FixedRuntime/manifest.json').read_text(encoding='utf-8'))['files']]
 
 # Alpha 28 backing contract reconstruction: zero is a valid disabled effective value,
 # remembered thickness remains separate, and portable Blender omits the support object at zero.
