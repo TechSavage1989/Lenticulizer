@@ -21,14 +21,14 @@ Lenticulizer is a Windows-first desktop tool for preparing lenticular and lens-f
 
 ## Download
 
-**Alpha 34 is the corrective Windows x64 updater prerelease** (available after its release gate succeeds). Alpha 32 and 33 cannot complete downloads because Windows denies hashing their exclusively open temporary ZIP. Upgrade to Alpha 34 manually once; then test in-app updating with a subsequent release.
+**Alpha 34 is published as the corrective Windows x64 updater prerelease.** Alpha 32 and 33 cannot complete downloads because Windows denies hashing their exclusively open temporary ZIP. Upgrade to Alpha 34 manually once; then test in-app updating with a subsequent release.
 
 - [GitHub releases index](https://github.com/TechSavage1989/Lenticulizer/releases) — find current prereleases and future versions.
 - [Alpha 32 prerelease details](https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.32).
 - [Alpha 33 update-test prerelease](https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.33).
-- [Alpha 34 updater repair prerelease](https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.34) (after publication).
-- [Download the Windows portable ZIP](https://github.com/TechSavage1989/Lenticulizer/releases/download/v3.0.0-alpha.32/Lenticulizer_Windows_Portable.zip).
-- [Blender add-on v1.18.43](https://github.com/TechSavage1989/Lenticulizer/releases/download/v3.0.0-alpha.32/Lenticulizer_3D_Blender_Addon_v1.18.43.zip).
+- [Alpha 34 updater repair prerelease](https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.34).
+- [Download the fixed Alpha 34 Windows portable ZIP](https://github.com/TechSavage1989/Lenticulizer/releases/download/v3.0.0-alpha.34/Lenticulizer_Windows_Portable.zip).
+- [Blender add-on v1.18.43](https://github.com/TechSavage1989/Lenticulizer/releases/download/v3.0.0-alpha.34/Lenticulizer_3D_Blender_Addon_v1.18.43.zip).
 
 The portable ZIP contains the self-contained `Lenticulizer.exe`. It is not an installer. This prerelease has passed hosted Windows build/parity/UI checks, but its live updater-install/rollback path and Blender viewport behavior still require user-device verification.
 
@@ -62,7 +62,7 @@ For source builds:
 
 **Upgrading from Alpha 31:** Alpha 31 cannot download this update itself. Close Alpha 31 and start Alpha 32 manually from its new folder. Keep your previous Alpha 31 folder as a rollback until you verify your projects and Blender integration.
 
-**Repairing Alpha 32 or 33:** Once Alpha 34 is published, download its Windows portable ZIP using your browser, close Lenticulizer, back up your existing Lenticulizer.exe, then extract the new executable into the **same app folder**. The stable shortcut and per-user settings are preserved. Alpha 32/33 cannot upgrade themselves because their own updater contains the file-sharing bug. See [Alpha 34 repair notes](docs/releases/alpha34-updater-verification-fix.md).
+**Repairing Alpha 32 or 33:** Download the published Alpha 34 Windows portable ZIP using your browser, close Lenticulizer, back up your existing Lenticulizer.exe, then extract the new executable into the **same app folder**. The stable shortcut and per-user settings are preserved. Alpha 32/33 cannot upgrade themselves because their own updater contains the file-sharing bug. See [Alpha 34 repair notes](docs/releases/alpha34-updater-verification-fix.md).
 
 For development, the source build entry remains `Build_SelfContained.bat`; see [Development](#development).
 

@@ -1,5 +1,7 @@
 # Alpha 34 updater file-sharing fix
 
+**Published:** [v3.0.0-alpha.34](https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.34), commit `e08e314b9cea7dc2b65e74c1ed281978060d7357`. [Hosted Windows build and release run 41163454888](https://github.com/TechSavage1989/Lenticulizer/actions/runs/41163454888) passed. The portable ZIP SHA-256 is `13cdac33b79b51cc1d98cc1b092f2968556001a5d3afd3ee9484518945ad6870`. All five release assets are present. Real Alpha 34-to-later-version update/rollback remains unverified.
+
 ## Root cause
 
 Alpha 32 and Alpha 33 download an update into an exclusive FileStream, then attempt SHA-256 verification with HashFile(temporary) before the exclusive writer is closed. Windows denies the second open. The UI remains stuck showing the last streamed progress value, which can be slightly below the full ZIP size even when the download completed.
