@@ -1,6 +1,6 @@
 # Alpha 32 updater foundation
 
-Alpha 32 is the source-development line that follows the confirmed Alpha 31 behavior baseline. It is not yet a published Windows release.
+Alpha 32 is a published Windows x64 portable prerelease following the confirmed Alpha 31 behavior baseline. Release tag: [v3.0.0-alpha.32](https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.32).
 
 ## Scope
 
@@ -18,7 +18,7 @@ Alpha 32 is the source-development line that follows the confirmed Alpha 31 beha
 
 Application behavior, image processing, Blender add-on v1.18.43, Project(6) baseline, and Alpha 31 labeled-test outputs are intended to remain unchanged.
 
-Alpha 31 has no updater, so the first move to Alpha 32 must be manual. After Alpha 32, updates can use the new mechanism once a compatible GitHub release feed is actually published and validated.
+Alpha 31 has no updater, so the first move to Alpha 32 is manual. The GitHub release feed is now published; end-to-end use of the Alpha 32 updater still needs a later test release and real Windows install/restart/rollback validation.
 
 ## Release format
 
@@ -34,6 +34,6 @@ A matching SHA-256 is integrity verification against the release manifest, not c
 
 ## Validation status
 
-Source/static parity, updater contract, unsafe-archive negative controls, and root-clutter negative control pass in the current reconstruction environment.
+The release commit `db2af51e311f0d9df2846d608f9a6f47ba1e92e9` passed [Windows source and native parity CI](https://github.com/TechSavage1989/Lenticulizer/actions/runs/41159999807), including compilation, runtime/heightmap/Blender-double tests, Windows UI-check script, packaging, and upload of all five assets. The GitHub tag points to that commit.
 
-A fresh .NET build, native Windows launch, real GitHub update cycle, rollback process test, live WebView2 behavior, and live Blender validation remain release gates.
+Actual use on the user's Windows machine, an installed Alpha 32-to-next-version update, live rollback/health failure, and live Blender viewport rendering remain unverified.

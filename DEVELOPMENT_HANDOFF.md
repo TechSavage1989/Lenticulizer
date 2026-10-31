@@ -2,184 +2,104 @@
 
 ## Current status
 
-Confirmed working behavior baseline: **Lenticulizer v3.0.0-alpha.31** with **Blender add-on v1.18.43**.
+**Published prerelease:** Lenticulizer **v3.0.0-alpha.32** for Windows x64, with Blender add-on **v1.18.43**.
 
-Current source-development line: **v3.0.0-alpha.32**.
+- Public repository: https://github.com/TechSavage1989/Lenticulizer
+- Default branch: `main`
+- Release: https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.32
+- Exact release commit/tag: `db2af51e311f0d9df2846d608f9a6f47ba1e92e9`
+- Hosted Windows validation and release job: https://github.com/TechSavage1989/Lenticulizer/actions/runs/41159999807
+- Latest user-confirmed pre-repository behavior baseline: Alpha 31 + add-on 1.18.43.
+- Alpha 32 native Windows CI succeeded. End-to-end updater installation/rollback and live Blender viewport interaction remain unverified.
 
-Repository: `TechSavage1989/Lenticulizer` (public). The public repository currently contains documentation only; application source publication has not been authorized. No GitHub release/update feed is live yet.
+Source and binary publication were explicitly approved. GitHub is now the public source and prerelease feed. Do not overwrite the Alpha 32 tag or its assets; future updates require new versions and tags.
 
-Alpha 31-equivalent source was reconstructed from the latest recoverable maintainable source plus the recorded Alpha 28–31 changes. Alpha 32 builds on that reconstructed source rather than reverting to older Alpha 26/27 code.
+## Release files and checksums
 
-## Alpha 32 changes in source
+The Alpha 32 release contains:
 
-### Stable portable identity
+| File | Purpose | SHA-256 |
+| --- | --- | --- |
+| `Lenticulizer_Windows_Portable.zip` | Self-contained Windows app with stable `Lenticulizer.exe` | `0eb3262a83aa79c1fd203d3aa87dca0c939035b1ac3b32ad0107128bb39e5171` |
+| `Lenticulizer_3D_Blender_Addon_v1.18.43.zip` | Matching Blender 5.0 add-on | `975854f306081f4f374acd02b361bc3130b8c349bdfa685b343246bfe775fdd0` |
+| `Lenticulizer_v3.0.0-alpha.32_Source.zip` | Source/build archive including runtime assets | `497915aaf7d557d3f183b1db025486b8bab7620e146d477666b94d26315b2dfd` |
+| `update-manifest.json` | Release identity/version/package/hash/size contract | `ad7a6745c27238f160fdbe5c048f51918e864554c1832e81cd7b041af324b189` |
+| `SHA256SUMS.txt` | Published checksums | `f7d93169ab0591122bfc9edbca94af3f74c1bb2ec03a73070f1e02ce992c8a6d` |
 
-- Assembly/output name is now `Lenticulizer`.
-- New packaged builds target the stable launch filename `Lenticulizer.exe`.
-- Build, launch, runtime verification, UI-check, and release-packaging wrappers use the stable filename.
-- Active validation projects now reference `Lenticulizer.dll` / matching runtimeconfig/deps names.
-- An in-place update preserves the current executable path. This intentionally avoids silently breaking a legacy custom/versioned shortcut. New manual installs use `Lenticulizer.exe`.
+Digests and uploaded asset sizes were verified against the GitHub release API. The release tag resolves to the exact successful workflow commit. These are integrity checks, **not publisher code signing**.
 
-### Per-user mutable state
-
-- Window placement is stored under `%LOCALAPPDATA%\Lenticulizer\Settings\window.json`.
-- Existing logs, runtime, browser profile, sessions/working data remain per-user.
-- Updater cache, downloads, staging, health markers, helper copy, and the one rollback executable live under `%LOCALAPPDATA%\Lenticulizer\Updates`.
-- Update staging is copied to the target filesystem before executable replacement to handle cross-volume source/staging cases safely.
-
-### GitHub updater foundation
-
-Native app service added with:
-
-- startup background check;
-- five-minute native WinForms timer;
-- focus-return check when at least two minutes have elapsed;
-- single-flight update operations;
-- ETag / `If-None-Match` release caching;
-- explicit offline state;
-- manual ten-second cooldown;
-- `Retry-After`, GitHub rate-limit reset, 403 and 5xx backoff;
-- compact update banner and Help-page status;
-- explicit **Download** and **Install and restart** actions only;
-- no automatic download/restart;
-- active-operation restart guard;
-- authorized HTTPS GitHub/release-CDN host checks;
-- required `update-manifest.json` with app ID/version/stable executable/package name/hash/size;
-- SHA-256 and exact-size verification;
-- strict one-root-EXE ZIP contract, traversal prevention, size and decompression-ratio limits;
-- Windows PE `MZ`, ProductName, and ProductVersion checks;
-- same-filesystem replacement staging;
-- one retained `Lenticulizer.previous.exe` rollback;
-- health token written only after the new WebView2 UI completes the native `bootstrap` handshake;
-- automatic restoration/relaunch of the previous executable if the new app does not become healthy.
-
-A matching SHA-256 validates the downloaded bytes against release metadata; it is not publisher signing.
-
-### Release packaging foundation
-
-Running the compiled stable executable with `--package-release <directory>` creates:
-
-- `Lenticulizer_Windows_Portable.zip`
-- `update-manifest.json`
-- `SHA256SUMS.txt`
-
-The updater ZIP deliberately contains only root `Lenticulizer.exe`.
-
-### Prepared CI
-
-The private source includes `.github/workflows/ci.yml`, a Windows validation workflow that performs source checks, explicit NuGet restores, .NET build/parity tests, self-contained publish, core/runtime verification, and source-archive construction. It does not publish releases or upload release binaries. It has not run on GitHub because application-source publication is not authorized. Interactive Windows updater/UI and live Blender tests remain manual release gates.
-
-### Repository/source guard
-
-- `scripts/root-allowlist.txt`
-- `scripts/check_root.py`
-- `validation/RootGuardChecks.py`
-
-The guard works with Git metadata when available and has a filesystem fallback for extracted source archives. The test demonstrates a clean pass plus an isolated unapproved-root-file failure.
-
-## Preserved Alpha 31 baseline
+## Functional baseline retained
 
 - Lenticular Lens and Lens-Free Relief workflows.
-- Source ordering/interlacing and 16-bit height/depth maps.
-- Automatic / Semi-Automatic / Manual settings.
+- Source image ordering/interlacing and 16-bit height/depth maps.
+- Automatic / Semi-Automatic / Manual settings modes.
 - LPI, DPI, phase/registration, IOR, viewing angle, lens/base and optional backing controls.
-- Alpha 29 compact Images/Optics layout and UI preferences.
-- Labeled test-print export workflow.
-- Blender add-on v1.18.43.
-- Uploaded Project(6) baseline with SHA-256 `54154ce98dae6b232ef486886ecdaf61f5370510abe9c247ad712d002ca99897`.
+- Alpha 29 compact Images/Optics layout and layout preferences.
+- Clean production outputs and optional labeled test-print export.
+- Blender add-on 1.18.43 with Project & Images, Optics & Calibration, and Output tabs.
+- User-provided `Lenticulizer_3D_Project(6).blend` baseline, recorded SHA-256 `54154ce98dae6b232ef486886ecdaf61f5370510abe9c247ad712d002ca99897`.
 
-## Validation completed in the current environment
+## Windows portable/update design
 
-Passed after Alpha 32 changes:
+- New portable executable name: `Lenticulizer.exe`, without version suffix.
+- In-place updates preserve an existing custom/versioned executable path so shortcuts are not silently broken.
+- Window placement: `%LOCALAPPDATA%\Lenticulizer\Settings\window.json`.
+- Logs/runtime/WebView2/session state remain in per-user application data.
+- Update cache, downloads, staging, helper, and health markers: `%LOCALAPPDATA%\Lenticulizer\Updates`.
+- One retained `Lenticulizer.previous.exe` rollback executable.
 
-```text
-node --check ui/src/bridge.js
-node --check ui/src/renderer.js
-node --check ui/src/test-output.js
-node validation/BridgeTests.js
-node validation/DropUiTests.js
-python validation/DesktopHeightmapContractChecks.py
-python validation/HeightmapFixtures.py
-python validation/BlenderHeightmapChecks.py
-python validation/Alpha32FoundationChecks.py
-python validation/UpdaterContractChecks.py
-python validation/RootGuardChecks.py
-python validation/SourceArchiveChecks.py
-python -m py_compile validation/*.py scripts/*.py blender/Lenticulizer_Blender_Addon_v1.18.43/*.py
-```
+The native update service provides startup, five-minute, and focus-return checks; ETag/cached requests; offline/error states; manual cooldown, retry and rate-limit backoff; explicit Download and Install and restart; host and manifest validation; size/SHA-256 validation; strict one-EXE ZIP/PE/product/version checks; staging; health-confirmed relaunch; and rollback on failure.
 
-The validation environment used Node 22.16.0, Python 3.13.5, NumPy 2.3.5, and Pillow 12.3.0. Results include 30 heightmap fixtures, 33 Blender add-on callback/project/geometry/export checks using API doubles, bridge/drop regressions, Alpha 31 resource/baseline preservation, updater/static-security contracts, archive extra-file/traversal negative controls, and the root-clutter negative control.
+**Alpha 31 has no updater.** The first transition to Alpha 32 is manual. Do not claim the Alpha 32 updater successfully upgrades to a later version until an actual previous-version-to-new-release test has passed.
 
-Not performed in this environment:
+## Source map and build
 
-- .NET compiler build of Alpha 32;
-- Windows EXE launch;
-- real WebView2 timers/focus/download/save behavior;
-- actual GitHub release download/install/relaunch;
-- real throttling/offline transition testing at the native HTTP layer;
-- updater rollback with live processes;
-- live Blender installation/viewport/rendering;
-- physical print testing.
+- `app/`: Windows shell, WebView2 host, updater, app preferences and packaging.
+- `backend/`: processing, optics, project/Blender integration.
+- `ui/`: embedded browser HTML/CSS/JavaScript.
+- `blender/`: current add-on source and ZIP.
+- `validation/`: core/Windows/Blender fixtures and regression/contract checks.
+- `scripts/`: runtime restoration, root allowlist and maintenance.
+- `packaging/`: runtime/source packaging.
+- `vendor/`: pinned WebView2 manifest/notices and restored runtime assets.
+- `docs/`: architecture and release history.
+- `.github/workflows/ci.yml`: Windows validation, artifacts and gated prerelease publishing.
 
-This environment does not currently provide the .NET 10 SDK and cannot directly obtain Microsoft/NuGet build dependencies, so source/static validation must not be represented as a compiled release.
+Expected Windows source build command: `Build_SelfContained.bat`.
 
-## First-update migration
+Toolchain: .NET SDK 10.0.400 with patch roll-forward, x64 Windows, local `NuGet.Config`, Python and Node for validation. The workflow restores pinned Microsoft WebView2 Fixed Version 152.0.4191.62 from a checked HTTPS cabinet and checks archive/file hashes and Microsoft signatures; the large runtime ZIP is not tracked in Git.
 
-Alpha 31 does not contain the new updater, so it cannot update itself to Alpha 32 through this mechanism. The first transition to a compiled Alpha 32 build must be manual.
+Expected portable output: `dist\Lenticulizer.exe`. Release packager creates `Lenticulizer_Windows_Portable.zip`, `update-manifest.json` and `SHA256SUMS.txt`. The release also includes the paired Blender add-on and complete source package.
 
-Once Alpha 32 is installed, subsequent in-place updates use the updater foundation. New packages use `Lenticulizer.exe`. If Alpha 32 itself is launched under an older/custom filename, the updater keeps that path during replacement to preserve existing shortcuts.
+Root exceptions are only the read-first Markdown files, required .NET configuration and build wrappers. See `scripts/root-allowlist.txt`. The guard and negative control work both in a checkout and a clean extracted source archive without `.git`.
 
-## Build and release commands
+## Validation at release commit
 
-Windows source build entry:
+The successful Windows workflow `41159999807` performed:
 
-```text
-Build_SelfContained.bat
-```
+- JavaScript bridge/drop and source syntax/DOM contracts.
+- 30 Python heightmap fixtures and 33 Blender API-double regression checks.
+- Root-layout guard, deliberate-clutter negative control and source archive plan.
+- Explicit NuGet restore and .NET 10 application compilation (zero compiler warnings/errors reported in the main build).
+- 57,512 core heightmap checks and 30 cross-language maps.
+- 48,647 runtime compatibility checks, including 360 matching PNG16 arrays.
+- 119 drop-import tests and 2,246 actual integrated application checks, including 12 direct-processing output pairs.
+- Imported heightmap vertical/horizontal stripe-phase tests, with the source fitted correctly before sampling.
+- Verification of 557 actual bundled runtime files.
+- Self-contained publish, embedded-core/runtime verification, Windows UI-check script, portable package, source package and release artifact upload.
+- GitHub release job, unique prerelease tag and all five uploaded release assets.
 
-Expected compiled output:
+The Alpha 32 phase-test regression was caused by the test comparing fitted output pixels with unfitted source-center colors. The corrected test retains gradient source images, checks each output coordinate against the correctly fitted source image, and includes a negative control against the flawed old assumption.
 
-```text
-dist\Lenticulizer.exe
-```
+**Not yet validated as an end-to-end real installed workflow:** manual Alpha 31-to-32 migration on the user's system; real Windows focus/interval/offline/rate-limit behavior across app sessions; Alpha 32-to-next-version download/stage/restart; health-timeout forced rollback; custom-shortcut preservation; live Blender viewport rendering; physical printing.
 
-Expected release assets after the build/Windows-check pipeline:
+## Next development and release gates
 
-```text
-release\Lenticulizer_Windows_Portable.zip
-release\update-manifest.json
-release\SHA256SUMS.txt
-```
+1. Test the published Alpha 32 ZIP on a normal Windows PC with actual user projects and Blender 5.0 integration.
+2. Create a small uniquely versioned follow-up prerelease to test the **actual updater** (checks, download, staging, install, healthy relaunch, settings and shortcut persistence, cleanup and rollback). Do not overwrite Alpha 32.
+3. Exercise offline/rate-limit, partial download, tampered package, active-operation and failed-health negative controls on native Windows.
+4. Verify only one rollback and no extra app-owned staging remain.
+5. Address any release issues before describing the automatic updater as production-verified.
+6. Keep README, AGENTS and this handoff current, revalidate hosted CI, and publish future releases with exact artifacts/hashes.
 
-The source pins .NET SDK 10.0.400 and runtime 10.0.11, includes the Fixed WebView2 Runtime build payload, and uses the repository `NuGet.Config` to restore from the official NuGet v3 source instead of inheriting a machine with no configured package source.
-
-## Repository map / root exceptions
-
-Implementation remains in the established `app/`, `backend/`, `ui/`, and `blender/` folders to avoid a risky move during updater development. Tests live in `validation/`, maintenance in `scripts/`, packaging in `packaging/`, documentation in `docs/`, and required vendored runtime assets in `vendor/`.
-
-Root exceptions are the read-first Markdown files, `Lenticulizer.csproj`, `global.json`, `NuGet.Config`, and small build/launch BAT wrappers. The reviewed root allowlist is `scripts/root-allowlist.txt`.
-
-The old root `README.txt` was moved to `docs/releases/legacy-alpha31-readme.txt`; it is historical and is not a build input.
-
-
-## Git publication runtime handling
-
-The Fixed Version WebView2 runtime is too large for a normal GitHub blob. The public source therefore omits `vendor/FixedRuntime/runtime.zip` from Git history. `Restore_Build_Assets.bat` restores it automatically from the pinned 152.0.4191.62 x64 Fixed Version cabinet. The restore path verifies the cabinet SHA-256, checks every expanded browser file against `vendor/FixedRuntime/manifest.json`, validates critical Microsoft Authenticode signatures, and rebuilds the embedded runtime archive. CI runs this restore before source/build checks.
-
-## Next release gates
-
-1. Fresh-compile Alpha 32 on Windows from an extracted source snapshot without `.git`.
-2. Run the built-in core/runtime/UI checks against `dist\Lenticulizer.exe`.
-3. Verify stable shortcut behavior and window/settings persistence.
-4. Publish a release only when authorized, with all three generated release assets.
-5. Test actual GitHub ETag/offline/rate-limit/manual/startup/5-minute/focus behavior.
-6. Exercise an Alpha 32 → newer test release download/hash/stage/install/relaunch and a forced-health-failure rollback negative control.
-7. Confirm only one rollback remains and app-owned staging/helper/temp cleanup occurs after health.
-8. Re-run live Blender integration if desktop bridge behavior changes.
-9. Verify hosted CI, exact commit/tag, release assets and hashes before calling the release ready.
-
-## Publication boundary
-
-Do not publish the application source merely because the repository is public. Source-publication scope remains unapproved. Documentation-only repository updates are allowed; application source/binaries/releases require explicit release/publication authorization.
-
-Do not add server setup, Codex CLI automation, unattended workers, payment setup, or API-account setup.
+No server setup, Codex CLI automation, unattended workers, payment setup or API-account setup.
