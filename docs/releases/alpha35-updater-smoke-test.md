@@ -1,5 +1,7 @@
 # Alpha 35 updater smoke test
 
+**Published:** [v3.0.0-alpha.35](https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.35), commit `f1ee60256742fec11904d1f2edb0675ddf4a0b06`. [Hosted Windows validation and release run 41164311657](https://github.com/TechSavage1989/Lenticulizer/actions/runs/41164311657) completed successfully. All five release assets are present. Windows portable ZIP SHA-256: `b6c30868c495a338e4b869abd9623652039fe9bfd4e82469d01f25030d64ccfe`. Source ZIP SHA-256: `0c08449dbbb7ec4c15dc3363abddf6c138208e5fbe7d895be6de32d786c4b3de`. Real Windows Alpha 34-to-35 installation and rollback still need validation.
+
 ## Release scope
 
 v3.0.0-alpha.35 is a small Windows x64 version and Help/About change to test Alpha 34's corrected in-app updater. Processing, optics, 3D preview, project schema, WebView2, updater/installer, stable Lenticulizer.exe, and Blender add-on v1.18.43 are unchanged.

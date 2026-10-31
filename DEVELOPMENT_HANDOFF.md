@@ -2,9 +2,21 @@
 
 ## Current status
 
-**Alpha 35 updater smoke-test target:** Lenticulizer v3.0.0-alpha.35 for Windows x64. A new gated prerelease is configured after Windows CI validation. Only assembly/runtime version identity, visible Help/Updates test text, manifest notes and release/check documentation are changed. The Alpha 34 downloader, installer, processing engines, WebView2, stable executable, projects/settings and Blender add-on 1.18.43 remain unchanged. Test an installed Alpha 34 app detecting, downloading, verifying, installing and restarting to Alpha 35; confirm same shortcut and preserved settings/projects. A real native update and rollback have not yet been completed. Alpha 32 and 33 require one-time manual installation of Alpha 34 before this test.
+**Published Alpha 35 updater smoke-test prerelease:** Lenticulizer **v3.0.0-alpha.35** for Windows x64 with Blender add-on **v1.18.43**. It is a small version/Help/About release for testing the repaired Alpha 34 updater. It does not change the updater, installer, core image processing, project format, bundled WebView2, stable executable, or user data storage.
 
-**Published corrective prerelease:** Lenticulizer **v3.0.0-alpha.34** for Windows x64, preserving Blender add-on **v1.18.43**.
+- Release: https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.35
+- Exact release tag/validated commit: `f1ee60256742fec11904d1f2edb0675ddf4a0b06`
+- Successful hosted Windows validation and release run: https://github.com/TechSavage1989/Lenticulizer/actions/runs/41164311657
+- Windows ZIP: 549,160,151 bytes; SHA-256 `b6c30868c495a338e4b869abd9623652039fe9bfd4e82469d01f25030d64ccfe`
+- Source ZIP: 375,274,653 bytes; SHA-256 `0c08449dbbb7ec4c15dc3363abddf6c138208e5fbe7d895be6de32d786c4b3de`
+- Unchanged Blender add-on ZIP SHA-256: `975854f306081f4f374acd02b361bc3130b8c349bdfa685b343246bfe775fdd0`
+- Update manifest SHA-256: `b366b5f8a1c71d970efca31f6e8a33b94e60ce949db80b96cb8583cf6a520919`; SHA256SUMS.txt SHA-256: `0d4daed11f1e5cffbc0f982b55e6b1405739576e16581c914ecaed66c1dc3104`
+- All five assets are uploaded, the release tag resolves to the successful workflow commit, and the release API feed lists Alpha 35 ahead of Alpha 34.
+- Windows CI passed source checks, 2,252 integrated checks including the file-sharing negative control, runtime and UI checks, plus source/portable packaging. Portable/source hashes printed by the CI job match the published GitHub asset digests.
+
+**Outstanding user test:** Run installed Alpha 34, detect Alpha 35 via the updater, Download, verify, Install and restart. Confirm project/settings and shortcut preservation, cleanup and rollback. Alpha 32/33 must be manually replaced with Alpha 34 before this test. Passing CI does not establish a successful in-place upgrade or rollback on the user's PC.
+
+**Previous published corrective prerelease:** Lenticulizer **v3.0.0-alpha.34** for Windows x64, preserving Blender add-on **v1.18.43**.
 
 - Release: https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.34
 - Exact release tag and commit: `e08e314b9cea7dc2b65e74c1ed281978060d7357`
@@ -17,7 +29,7 @@
 
 Alpha 32 and Alpha 33 contain the old downloader and must install Alpha 34 manually once. In-app update download/install/restart/rollback from Alpha 34 to a later version remains unverified. This release does not establish production-ready automatic updating.
 
-**Root cause and correction:** Alpha 32 and 33 successfully detect updates but cannot finalize their downloads because HashFile opens the temporary ZIP while an exclusive FileStream writer remains open. On Windows this produces an IOException, and the UI remains at the last progress reading. The change closes streams before hashing, shows verification, displays a retryable error after failure, and sets a 60-second per-read timeout. Native negative-control and success tests are added. Alpha 34 release tag, hosted workflow, and all five assets were verified after successful publication. Affected users must install Alpha 34 manually; test the corrected updater with a later Alpha 35 prerelease.
+**Root cause and correction:** Alpha 32 and 33 successfully detect updates but cannot finalize their downloads because HashFile opens the temporary ZIP while an exclusive FileStream writer remains open. On Windows this produces an IOException, and the UI remains at the last progress reading. The change closes streams before hashing, shows verification, displays a retryable error after failure, and sets a 60-second per-read timeout. Native negative-control and success tests are added. Alpha 34 release tag, hosted workflow, and all five assets were verified after successful publication. Affected users must install Alpha 34 manually; test the corrected updater using the published Alpha 35 prerelease.
 
 **Previous published prerelease:** Lenticulizer **v3.0.0-alpha.33** for Windows x64, with Blender add-on **v1.18.43**. This is an intentionally small updater smoke-test version, not a production verification of the updater.
 

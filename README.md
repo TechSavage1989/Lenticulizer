@@ -21,7 +21,7 @@ Lenticulizer is a Windows-first desktop tool for preparing lenticular and lens-f
 
 ## Download
 
-**Alpha 35 is the small updater smoke-test target for the corrected Alpha 34 application.** The Alpha 35 Windows prerelease will be available after its gated CI build and publication. Use Alpha 34, not Alpha 32/33, to test in-app updating.
+**Alpha 35 is now published as the small updater smoke-test release for the corrected Alpha 34 application.** Its Windows CI and publication passed. Start from Alpha 34, not Alpha 32/33, to test the in-app upgrade. Live installation and rollback remain unverified.
 
 **Alpha 34 is published as the corrective Windows x64 updater prerelease.** Alpha 32 and 33 cannot complete downloads because Windows denies hashing their exclusively open temporary ZIP. Upgrade to Alpha 34 manually once; then test in-app updating with a subsequent release.
 
@@ -29,8 +29,9 @@ Lenticulizer is a Windows-first desktop tool for preparing lenticular and lens-f
 - [Alpha 32 prerelease details](https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.32).
 - [Alpha 33 update-test prerelease](https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.33).
 - [Alpha 34 updater repair prerelease](https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.34).
-- [Alpha 35 updater test prerelease](https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.35) (after publication).
-- [Download the fixed Alpha 34 Windows portable ZIP](https://github.com/TechSavage1989/Lenticulizer/releases/download/v3.0.0-alpha.34/Lenticulizer_Windows_Portable.zip).
+- [Alpha 35 updater test prerelease](https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.35).
+- [Download the fixed Alpha 34 Windows portable ZIP (updater test starting point)](https://github.com/TechSavage1989/Lenticulizer/releases/download/v3.0.0-alpha.34/Lenticulizer_Windows_Portable.zip).
+- [Download Alpha 35 Windows portable ZIP (manual fallback)](https://github.com/TechSavage1989/Lenticulizer/releases/download/v3.0.0-alpha.35/Lenticulizer_Windows_Portable.zip).
 - [Blender add-on v1.18.43](https://github.com/TechSavage1989/Lenticulizer/releases/download/v3.0.0-alpha.34/Lenticulizer_3D_Blender_Addon_v1.18.43.zip).
 
 The portable ZIP contains the self-contained `Lenticulizer.exe`. It is not an installer. This prerelease has passed hosted Windows build/parity/UI checks, but its live updater-install/rollback path and Blender viewport behavior still require user-device verification.
