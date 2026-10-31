@@ -1,5 +1,7 @@
 # Alpha 33 updater smoke test
 
+**Published:** v3.0.0-alpha.33 at https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.33, commit `1a0b2c78b025c875121b0531131beb469cf15356`, Windows CI https://github.com/TechSavage1989/Lenticulizer/actions/runs/41161318073 (success). All five GitHub release assets uploaded. The portable ZIP digest is `880440f0a5c759a83e367592c0fb4b31e47f97aff9f37d850f49a6064cedb8b8`. Live end-to-end updater validation remains pending.
+
 ## Scope
 
 Lenticulizer v3.0.0-alpha.33 is a small Windows portable release for testing an Alpha 32-to-Alpha 33 in-app update. It changes .NET version metadata, UI/About version text, a visible update-test note, manifest release notes, Windows CI release/version references, and matching source contracts/documentation.

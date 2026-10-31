@@ -21,11 +21,11 @@ Lenticulizer is a Windows-first desktop tool for preparing lenticular and lens-f
 
 ## Download
 
-**Alpha 32 is the Windows x64 starting point for testing the updater.** Alpha 33 is a small follow-up prerelease for an in-app updater test, available after its gated Windows CI build and release succeeds.
+**Alpha 33 is published as a Windows x64 updater smoke-test prerelease.** Start from Alpha 32 to test in-app detection, download, installation and relaunch. Alpha 31 still requires a manual upgrade to Alpha 32 first.
 
 - [GitHub releases index](https://github.com/TechSavage1989/Lenticulizer/releases) — find current prereleases and future versions.
 - [Alpha 32 prerelease details](https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.32).
-- [Alpha 33 update-test prerelease](https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.33) (after publication).
+- [Alpha 33 update-test prerelease](https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.33).
 - [Download the Windows portable ZIP](https://github.com/TechSavage1989/Lenticulizer/releases/download/v3.0.0-alpha.32/Lenticulizer_Windows_Portable.zip).
 - [Blender add-on v1.18.43](https://github.com/TechSavage1989/Lenticulizer/releases/download/v3.0.0-alpha.32/Lenticulizer_3D_Blender_Addon_v1.18.43.zip).
 
@@ -61,7 +61,7 @@ For source builds:
 
 **Upgrading from Alpha 31:** Alpha 31 cannot download this update itself. Close Alpha 31 and start Alpha 32 manually from its new folder. Keep your previous Alpha 31 folder as a rollback until you verify your projects and Blender integration.
 
-**Testing Alpha 32 to Alpha 33:** Open the installed Alpha 32 application, select **Help > Updates**, and use **Check for updates** if needed. The update should appear automatically when published. Click **Download**, then **Install and restart**. Confirm the original shortcut starts the new build, the title bar and Help/About show Alpha 33, and your projects/settings still work. See the [native test checklist](docs/releases/alpha33-updater-smoke-test.md).
+**Testing Alpha 32 to Alpha 33:** Open the installed Alpha 32 application, select **Help > Updates**, and use **Check for updates** if the automatic check has not yet found the published Alpha 33 release. Click **Download**, then **Install and restart**. Confirm the original shortcut starts the new build, the title bar and Help/About show Alpha 33, and your projects/settings still work. See the [native test checklist](docs/releases/alpha33-updater-smoke-test.md).
 
 For development, the source build entry remains `Build_SelfContained.bat`; see [Development](#development).
 

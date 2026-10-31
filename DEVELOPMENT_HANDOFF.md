@@ -2,9 +2,19 @@
 
 ## Current status
 
-**Alpha 33 updater smoke-test target:** v3.0.0-alpha.33 for Windows x64, from a gated Windows CI publication job. Verify the live tag, successful workflow, uploaded assets and SHA-256 values before describing the release as published. This changes version metadata and visible Help/Updates text only; processing code and the v1.18.43 Blender add-on remain unchanged. Live Alpha 32-to-33 installation and rollback on a real Windows machine remain unverified.
+**Published prerelease:** Lenticulizer **v3.0.0-alpha.33** for Windows x64, with Blender add-on **v1.18.43**. This is an intentionally small updater smoke-test version, not a production verification of the updater.
 
-**Previously verified published prerelease:** Lenticulizer **v3.0.0-alpha.32** for Windows x64, with Blender add-on **v1.18.43**.
+- Release: https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.33
+- Tag/validated release commit: `1a0b2c78b025c875121b0531131beb469cf15356`
+- Hosted Windows validation and release job: https://github.com/TechSavage1989/Lenticulizer/actions/runs/41161318073 (completed successfully)
+- GitHub API release feed now lists Alpha 33 first, then Alpha 32. The release has all five assets uploaded.
+- Downloadable portable ZIP: 549,160,151 bytes, SHA-256 `880440f0a5c759a83e367592c0fb4b31e47f97aff9f37d850f49a6064cedb8b8`.
+- Matching source ZIP: 375,267,751 bytes, SHA-256 `47357df3c7715ddf00fc60e4a3f7064cb0adec8dd6aef29abb900edf57309ad4`.
+- Blender add-on ZIP (unchanged): SHA-256 `975854f306081f4f374acd02b361bc3130b8c349bdfa685b343246bfe775fdd0`.
+- Update manifest SHA-256: `c427abd6b333b3738244ff925a7cfea42d62a904a79017be0ecafe255737b756`. SHA256SUMS.txt SHA-256: `840463793ef485e05fb94fbf0d063cd3e5b3a081b8c0e6295efa2a343dc11996`.
+- The Windows runner's printed portable and source hashes matched the uploaded GitHub asset digests. Actual Alpha 32-to-33 update/restart/rollback on the user's Windows PC remains unverified.
+
+**Previous published updater baseline:** Lenticulizer **v3.0.0-alpha.32** for Windows x64, with Blender add-on **v1.18.43**.
 
 - Public repository: https://github.com/TechSavage1989/Lenticulizer
 - Default branch: `main`
@@ -16,7 +26,7 @@
 
 Source and binary publication were explicitly approved. GitHub is now the public source and prerelease feed. Do not overwrite the Alpha 32 tag or its assets; future updates require new versions and tags.
 
-## Release files and checksums
+## Alpha 32 baseline release files and checksums
 
 The Alpha 32 release contains:
 

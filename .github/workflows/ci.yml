@@ -150,4 +150,4 @@ jobs:
             --target "${GITHUB_SHA}" \
             --prerelease \
             --title "${RELEASE_TITLE}" \
-            --notes "Alpha 33 is a small version and Help/Updates text update to smoke-test upgrading from Alpha 33. Processing, Blender, and the stable executable name are unchanged. Automatic checks are supported; download and install require approval. End-to-end native updater testing is pending. This is a prerelease."
+            --notes "Alpha 33 is a small version and Help/Updates text update to smoke-test upgrading from Alpha 32. Processing, Blender, and the stable executable name are unchanged. Automatic checks are supported; download and install require approval. End-to-end native updater testing is pending. This is a prerelease."
