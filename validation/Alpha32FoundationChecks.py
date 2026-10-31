@@ -12,7 +12,7 @@ def sha(path):
 
 # Identity/version/resources.
 program=(root/'app/Program.cs').read_text(encoding='utf-8')
-assert '3.0.0-alpha.34' in program
+assert '3.0.0-alpha.35' in program
 csproj=(root/'Lenticulizer.csproj').read_text(encoding='utf-8')
 assert 'Lenticulizer_3D_Blender_Addon_v1.18.43.zip' in csproj
 assert 'ui/src/test-output.js' in csproj

@@ -31,15 +31,17 @@ assert "foreach ($item in $expectedBrowser) { $expectedMap[" not in runtime_rest
 assert "Expected runtime file is missing" in runtime_restore
 
 # Stable identity and package entry point.
-assert '3.0.0-alpha.34' in program
+assert '3.0.0-alpha.35' in program
 assert '<AssemblyName>Lenticulizer</AssemblyName>' in csproj
-assert 'AssemblyInformationalVersion("3.0.0-alpha.34")' in program
+assert 'AssemblyInformationalVersion("3.0.0-alpha.35")' in program
 for value in (build,start,ui_check):
     assert 'Lenticulizer.exe' in value
-assert 'Lenticulizer_3D_v3.0.0-alpha.34_SelfContained.exe' not in build
+assert 'Lenticulizer_3D_v3.0.0-alpha.35_SelfContained.exe' not in build
 assert 'Lenticulizer_3D.exe' not in renderer
-assert 'v3.0.0 alpha 34' in html and '3.0.0-alpha.34' in renderer
-assert 'Alpha 34 updater repair:' in html
+assert 'v3.0.0 alpha 35' in html and '3.0.0-alpha.35' in renderer
+assert 'Alpha 35 updater smoke test:' in html
+# Keep the corrected Alpha 34 download/file-lock regression contract.
+assert 'VerifyAndFinalizePackage(temporary, finalPath, selected.PackageSize, selected.PackageSha256)' in service
 assert '--package-release' in program and '--package-release' in build
 assert 'Lenticulizer_Windows_Portable.zip' in packager
 assert 'update-manifest.json' in packager

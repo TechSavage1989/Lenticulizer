@@ -10,6 +10,8 @@ Read `DEVELOPMENT_HANDOFF.md` before changing Lenticulizer.
 - Do not publish source, binaries, releases, credentials, or repository-visibility changes without explicit authorization.
 - Do not overwrite published tags/releases.
 
+- Alpha 35 is a small release for user-driven updater testing from installed Alpha 34. Do not modify the Alpha 34 updater/installer or describe its real-world install/rollback path as validated before user testing.
+
 ## Source map
 
 The existing toolchain uses these top-level implementation equivalents instead of forcing a new `src/` migration during active updater work:

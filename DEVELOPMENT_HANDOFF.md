@@ -2,6 +2,8 @@
 
 ## Current status
 
+**Alpha 35 updater smoke-test target:** Lenticulizer v3.0.0-alpha.35 for Windows x64. A new gated prerelease is configured after Windows CI validation. Only assembly/runtime version identity, visible Help/Updates test text, manifest notes and release/check documentation are changed. The Alpha 34 downloader, installer, processing engines, WebView2, stable executable, projects/settings and Blender add-on 1.18.43 remain unchanged. Test an installed Alpha 34 app detecting, downloading, verifying, installing and restarting to Alpha 35; confirm same shortcut and preserved settings/projects. A real native update and rollback have not yet been completed. Alpha 32 and 33 require one-time manual installation of Alpha 34 before this test.
+
 **Published corrective prerelease:** Lenticulizer **v3.0.0-alpha.34** for Windows x64, preserving Blender add-on **v1.18.43**.
 
 - Release: https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.34

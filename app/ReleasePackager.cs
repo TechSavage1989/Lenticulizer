@@ -11,9 +11,9 @@ namespace Lenticulizer.Desktop
     {
         internal static readonly string[] Notes = new[]
         {
-            "Alpha 34 fixes a Windows file-sharing error during SHA-256 verification of downloaded updates.",
-            "Verification progress and retryable download errors are now visible. Network reads time out after 60 seconds without data.",
-            "The stable executable, image-processing workflows, user settings, and Blender add-on v1.18.43 are preserved."
+            "Alpha 35 is a small version and Help/About text change to test the corrected Alpha 34 updater.",
+            "Check that the title bar and Help/About display 3.0.0-alpha.35 after restart.",
+            "Updater and installer logic, projects, preferences, stable executable and Blender add-on v1.18.43 are unchanged."
         };
 
         internal static int Build(string destination)
