@@ -2,7 +2,9 @@
 
 ## Current status
 
-**Published prerelease:** Lenticulizer **v3.0.0-alpha.33** for Windows x64, with Blender add-on **v1.18.43**. This is an intentionally small updater smoke-test version, not a production verification of the updater.
+**Corrective Alpha 34 release target:** Lenticulizer **v3.0.0-alpha.34** for Windows x64, preserving Blender add-on **v1.18.43**. Alpha 32 and 33 successfully detect updates but cannot finalize their downloads because HashFile opens the temporary ZIP while an exclusive FileStream writer remains open. On Windows this produces an IOException, and the UI remains at the last progress reading. The change closes streams before hashing, shows verification, displays a retryable error after failure, and sets a 60-second per-read timeout. Native negative-control and success tests are added. Verify the Alpha 34 release tag/hosted workflow/assets before claiming publication. Affected users must install Alpha 34 manually; test the corrected updater with a later Alpha 35 prerelease.
+
+**Previous published prerelease:** Lenticulizer **v3.0.0-alpha.33** for Windows x64, with Blender add-on **v1.18.43**. This is an intentionally small updater smoke-test version, not a production verification of the updater.
 
 - Release: https://github.com/TechSavage1989/Lenticulizer/releases/tag/v3.0.0-alpha.33
 - Tag/validated release commit: `1a0b2c78b025c875121b0531131beb469cf15356`
@@ -108,7 +110,7 @@ The Alpha 32 phase-test regression was caused by the test comparing fitted outpu
 ## Next development and release gates
 
 1. Test the published Alpha 32 ZIP on a normal Windows PC with actual user projects and Blender 5.0 integration.
-2. Test the Alpha 33 follow-up prerelease via the **actual Alpha 32-to-33 updater** (checks, download, staging, install, healthy relaunch, settings and shortcut persistence, cleanup and rollback). Do not overwrite Alpha 32.
+2. Verify Alpha 34's Windows file-sharing negative control and native hash success case. Manually replace Alpha 32/33 with the Alpha 34 executable. Create a new Alpha 35 test release to exercise the **actual corrected updater** (download, verification, staging, install, relaunch, settings/shortcut preservation, cleanup and rollback). Do not overwrite released tags.
 3. Exercise offline/rate-limit, partial download, tampered package, active-operation and failed-health negative controls on native Windows.
 4. Verify only one rollback and no extra app-owned staging remain.
 5. Address any release issues before describing the automatic updater as production-verified.

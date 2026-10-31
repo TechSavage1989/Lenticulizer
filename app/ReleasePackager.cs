@@ -11,9 +11,9 @@ namespace Lenticulizer.Desktop
     {
         internal static readonly string[] Notes = new[]
         {
-            "Alpha 33 is a small version and Help/Updates text change to test updating from Alpha 32.",
-            "The stable Lenticulizer.exe name, project workflows, settings storage, and Blender add-on v1.18.43 are retained.",
-            "Update checks are automatic; downloading and installing the verified update remain user-initiated."
+            "Alpha 34 fixes a Windows file-sharing error during SHA-256 verification of downloaded updates.",
+            "Verification progress and retryable download errors are now visible. Network reads time out after 60 seconds without data.",
+            "The stable executable, image-processing workflows, user settings, and Blender add-on v1.18.43 are preserved."
         };
 
         internal static int Build(string destination)

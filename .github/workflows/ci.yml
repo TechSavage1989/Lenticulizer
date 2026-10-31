@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       publish_release:
-        description: Publish the validated Alpha 33 prerelease
+        description: Publish the validated Alpha 34 prerelease
         required: false
         default: false
         type: boolean
@@ -16,8 +16,8 @@ permissions:
   contents: write
 
 env:
-  RELEASE_TAG: v3.0.0-alpha.33
-  RELEASE_TITLE: Lenticulizer v3.0.0-alpha.33
+  RELEASE_TAG: v3.0.0-alpha.34
+  RELEASE_TITLE: Lenticulizer v3.0.0-alpha.34
 
 jobs:
   validate:
@@ -93,13 +93,13 @@ jobs:
       - name: Package source archive
         shell: pwsh
         run: |
-          python packaging/package_source.py "release/Lenticulizer_v3.0.0-alpha.33_Source.zip"
-          Copy-Item "release/Lenticulizer_v3.0.0-alpha.33_Source_SHA256.txt" "release/Source_SHA256.txt" -Force
+          python packaging/package_source.py "release/Lenticulizer_v3.0.0-alpha.34_Source.zip"
+          Copy-Item "release/Lenticulizer_v3.0.0-alpha.34_Source_SHA256.txt" "release/Source_SHA256.txt" -Force
           Copy-Item "blender/Lenticulizer_3D_Blender_Addon_v1.18.43.zip" "release/Lenticulizer_3D_Blender_Addon_v1.18.43.zip" -Force
           $addon = (Get-FileHash "release/Lenticulizer_3D_Blender_Addon_v1.18.43.zip" -Algorithm SHA256).Hash.ToLowerInvariant()
-          $source = (Get-FileHash "release/Lenticulizer_v3.0.0-alpha.33_Source.zip" -Algorithm SHA256).Hash.ToLowerInvariant()
+          $source = (Get-FileHash "release/Lenticulizer_v3.0.0-alpha.34_Source.zip" -Algorithm SHA256).Hash.ToLowerInvariant()
           Add-Content "release/SHA256SUMS.txt" "$addon  Lenticulizer_3D_Blender_Addon_v1.18.43.zip"
-          Add-Content "release/SHA256SUMS.txt" "$source  Lenticulizer_v3.0.0-alpha.33_Source.zip"
+          Add-Content "release/SHA256SUMS.txt" "$source  Lenticulizer_v3.0.0-alpha.34_Source.zip"
 
       - name: Verify source archive construction
         run: python validation/SourceArchiveChecks.py
@@ -107,13 +107,13 @@ jobs:
       - name: Upload validated release assets
         uses: actions/upload-artifact@v4
         with:
-          name: lenticulizer-alpha33-release
+          name: lenticulizer-alpha34-release
           path: release/*
           if-no-files-found: error
           compression-level: 0
 
   release:
-    if: (github.event_name == 'workflow_dispatch' && inputs.publish_release == true) || (github.event_name == 'push' && github.event.head_commit.message == 'Publish Alpha 33 updater smoke-test prerelease')
+    if: (github.event_name == 'workflow_dispatch' && inputs.publish_release == true) || (github.event_name == 'push' && github.event.head_commit.message == 'Publish Alpha 34 updater verification fix')
     needs: validate
     runs-on: ubuntu-latest
     permissions:
@@ -125,7 +125,7 @@ jobs:
       - name: Download validated release assets
         uses: actions/download-artifact@v4
         with:
-          name: lenticulizer-alpha33-release
+          name: lenticulizer-alpha34-release
           path: release
 
       - name: Verify tag does not already exist
@@ -137,7 +137,7 @@ jobs:
             exit 1
           fi
 
-      - name: Publish Alpha 33 prerelease
+      - name: Publish Alpha 34 prerelease
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -146,8 +146,8 @@ jobs:
             release/update-manifest.json \
             release/SHA256SUMS.txt \
             release/Lenticulizer_3D_Blender_Addon_v1.18.43.zip \
-            release/Lenticulizer_v3.0.0-alpha.33_Source.zip \
+            release/Lenticulizer_v3.0.0-alpha.34_Source.zip \
             --target "${GITHUB_SHA}" \
             --prerelease \
             --title "${RELEASE_TITLE}" \
-            --notes "Alpha 33 is a small version and Help/Updates text update to smoke-test upgrading from Alpha 32. Processing, Blender, and the stable executable name are unchanged. Automatic checks are supported; download and install require approval. End-to-end native updater testing is pending. This is a prerelease."
+            --notes "Alpha 34 corrects the SHA-256 verification file-sharing failure found in Alpha 32 and 33. It adds visible verification, retryable errors and a 60-second no-data timeout. Existing image-processing and Blender add-on 1.18.43 are unchanged. One-time manual installation is required from Alpha 32/33; end-to-end updater/rollback tests remain pending."

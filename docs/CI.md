@@ -2,7 +2,7 @@
 
 The Windows CI workflow is `.github/workflows/ci.yml`.
 
-On each push to `main` and pull request it validates source and creates **private workflow artifacts**. It publishes a GitHub prerelease only through its gated release job after successful validation and an authorized release trigger. The Alpha 32 prerelease was approved and published on the verified release-trigger commit. Alpha 33 uses a separate exact-message gated release commit after validation; routine source/documentation commits do **not** create new releases.
+On each push to `main` and pull request it validates source and creates **private workflow artifacts**. It publishes a GitHub prerelease only through its gated release job after successful validation and an authorized release trigger. The Alpha 32 prerelease was approved and published on the verified release-trigger commit. Alpha 33 and the corrective Alpha 34 release each use separate exact-message gated release commits after validation; routine source/documentation commits do **not** create new releases.
 
 ## Validations
 

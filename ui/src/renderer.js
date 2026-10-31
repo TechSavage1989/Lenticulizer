@@ -15,12 +15,12 @@
   };
 
   const api = window.lenticulizer || {
-    bootstrap: async () => ({ version: '3.0.0-alpha.33', sessionDir: 'Browser Preview', projectPath: 'Browser preview only', project: browserPreviewProject, backendExists: false, blenderAddon: '', blenderAddonExists: false }),
+    bootstrap: async () => ({ version: '3.0.0-alpha.34', sessionDir: 'Browser Preview', projectPath: 'Browser preview only', project: browserPreviewProject, backendExists: false, blenderAddon: '', blenderAddonExists: false }),
     startBackend: async () => ({ ok: false, error: 'Browser preview only' }),
     backendStatus: async () => ({ running: false }),
     runtimeNotices: async () => false,
-    updateStatus: async () => ({ state: 'unavailable', installedVersion: '3.0.0-alpha.33', latestVersion: '', message: 'Browser preview only', notes: [], canDownload: false, canInstall: false }),
-    checkForUpdates: async () => ({ state: 'unavailable', installedVersion: '3.0.0-alpha.33', latestVersion: '', message: 'Browser preview only', notes: [], canDownload: false, canInstall: false }),
+    updateStatus: async () => ({ state: 'unavailable', installedVersion: '3.0.0-alpha.34', latestVersion: '', message: 'Browser preview only', notes: [], canDownload: false, canInstall: false }),
+    checkForUpdates: async () => ({ state: 'unavailable', installedVersion: '3.0.0-alpha.34', latestVersion: '', message: 'Browser preview only', notes: [], canDownload: false, canInstall: false }),
     downloadUpdate: async () => ({ state: 'error', message: 'Browser preview only' }),
     installUpdate: async () => ({ ok: false, error: 'Browser preview only' }),
     openUpdateRelease: async () => false,
@@ -108,7 +108,7 @@
 
     const banner = $('updateBanner');
     if (!banner) return;
-    const visibleState = ['available', 'downloaded', 'downloading', 'error', 'offline', 'deferred'].includes(value.state);
+    const visibleState = ['available', 'downloaded', 'downloading', 'verifying', 'error', 'offline', 'deferred'].includes(value.state);
     const dismissed = latest && dismissedUpdateVersion === latest && value.state === 'available';
     banner.classList.toggle('hidden', !visibleState || dismissed);
     banner.className = `update-banner${(!visibleState || dismissed) ? ' hidden' : ''} state-${value.state || 'idle'}`;
@@ -117,12 +117,14 @@
     if (value.state === 'available') headline = 'Update available';
     else if (value.state === 'downloaded') headline = 'Update ready to install';
     else if (value.state === 'downloading') headline = 'Downloading update';
-    else if (value.state === 'error') headline = 'Update check failed';
+    else if (value.state === 'verifying') headline = 'Verifying update';
+    else if (value.state === 'error') headline = value.canDownload ? 'Update download failed' : 'Update check failed';
     else if (value.state === 'offline') headline = 'Update check unavailable';
     else if (value.state === 'deferred') headline = 'Update check paused';
     $('updateHeadline').textContent = headline;
-    const progress = value.state === 'downloading' && Number(value.totalBytes) > 0 ? ` · ${formatBytes(value.downloadedBytes)} / ${formatBytes(value.totalBytes)}` : '';
-    $('updateVersionText').textContent = latest ? `${installed} → ${latest}${progress}` : `${value.message || ''}${progress}`;
+    const progress = (value.state === 'downloading' || value.state === 'verifying') && Number(value.totalBytes) > 0 ? ` · ${formatBytes(value.downloadedBytes)} / ${formatBytes(value.totalBytes)}` : '';
+    const message = ['error', 'offline', 'deferred', 'verifying'].includes(value.state) ? ` · ${value.message || ''}` : '';
+    $('updateVersionText').textContent = latest ? `${installed} to ${latest}${progress}${message}` : `${value.message || ''}${progress}`;
 
     const notes = Array.isArray(value.notes) ? value.notes.slice(0, 3) : [];
     const list = $('updateNotes');
@@ -130,9 +132,9 @@
     const download = $('updateDownloadButton');
     const install = $('updateInstallButton');
     const readMore = $('updateReadMoreButton');
-    download.classList.toggle('hidden', !value.canDownload && value.state !== 'downloading');
-    download.disabled = value.state === 'downloading';
-    download.textContent = value.state === 'downloading' ? 'Downloading…' : 'Download';
+    download.classList.toggle('hidden', !value.canDownload && !['downloading', 'verifying'].includes(value.state));
+    download.disabled = value.state === 'downloading' || value.state === 'verifying';
+    download.textContent = value.state === 'downloading' ? 'Downloading…' : value.state === 'verifying' ? 'Verifying…' : value.state === 'error' && value.canDownload ? 'Retry download' : 'Download';
     install.classList.toggle('hidden', !value.canInstall);
     readMore.classList.toggle('hidden', !value.readMoreUrl);
     if (manual) setStatus(value.message || 'Update check complete.');
@@ -1602,7 +1604,7 @@
       ]);
       const created = new Date().toISOString();
       const result = await globalThis.LenticulizerTestOutput.createTestSet(
-        colorBytes, heightmapBytes, current.settings || {}, ($('testOutputName')?.value || '').trim(), bootstrap?.version || '3.0.0-alpha.33', created
+        colorBytes, heightmapBytes, current.settings || {}, ($('testOutputName')?.value || '').trim(), bootstrap?.version || '3.0.0-alpha.34', created
       );
       const latest = await api.readProject();
       if (testExportSignature(latest) !== signature) throw new Error('The project changed while the labeled test set was being prepared. Review the current output and retry.');
@@ -1815,7 +1817,7 @@
 
     bootstrap = await api.bootstrap();
     renderUpdateStatus(bootstrap.update || await api.updateStatus());
-    if ($('helpAppVersion')) $('helpAppVersion').textContent = `Lenticulizer 3D ${bootstrap.version || '3.0.0-alpha.33'}`;
+    if ($('helpAppVersion')) $('helpAppVersion').textContent = `Lenticulizer 3D ${bootstrap.version || '3.0.0-alpha.34'}`;
     if(bootstrap.uiTesting) window.__lenticulizerDiagnostics=Object.freeze({view:()=>({...sharedView}),geometry:()=>({samples:liveViewers[0].axisSamples,imported:liveViewers[0].importedGeometry()})});
     $('sessionName').textContent = bootstrap.sessionDir.split(/[\\/]/).pop();
     $('projectPathLabel').textContent = bootstrap.projectPath;

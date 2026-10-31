@@ -31,15 +31,15 @@ assert "foreach ($item in $expectedBrowser) { $expectedMap[" not in runtime_rest
 assert "Expected runtime file is missing" in runtime_restore
 
 # Stable identity and package entry point.
-assert '3.0.0-alpha.33' in program
+assert '3.0.0-alpha.34' in program
 assert '<AssemblyName>Lenticulizer</AssemblyName>' in csproj
-assert 'AssemblyInformationalVersion("3.0.0-alpha.33")' in program
+assert 'AssemblyInformationalVersion("3.0.0-alpha.34")' in program
 for value in (build,start,ui_check):
     assert 'Lenticulizer.exe' in value
-assert 'Lenticulizer_3D_v3.0.0-alpha.33_SelfContained.exe' not in build
+assert 'Lenticulizer_3D_v3.0.0-alpha.34_SelfContained.exe' not in build
 assert 'Lenticulizer_3D.exe' not in renderer
-assert 'v3.0.0 alpha 33' in html and '3.0.0-alpha.33' in renderer
-assert 'Alpha 33 updater test:' in html
+assert 'v3.0.0 alpha 34' in html and '3.0.0-alpha.34' in renderer
+assert 'Alpha 34 updater repair:' in html
 assert '--package-release' in program and '--package-release' in build
 assert 'Lenticulizer_Windows_Portable.zip' in packager
 assert 'update-manifest.json' in packager
@@ -82,6 +82,16 @@ assert 'MaximumDownloadBytes = 1610612736L' in service
 
 # Cryptographic/package/archive/executable identity checks.
 assert 'SHA256.HashData' in service
+# Alpha 32/33 hashed the exclusively locked output before disposing its FileStream.
+download=service.split('public async Task<Dictionary<string, object>> DownloadAsync',1)[1].split('public UpdateInstallPlan PrepareInstall',1)[0]
+assert 'await using (var output = new FileStream(temporary, FileMode.CreateNew, FileAccess.Write, FileShare.None' in download
+assert download.index('await output.FlushAsync(cancellation)') < download.index('VerifyAndFinalizePackage(temporary, finalPath')
+assert 'readTimeout.CancelAfter(TimeSpan.FromSeconds(60))' in download
+assert 'verifying["state"] = "verifying"' in download and 'Publish(verifying)' in download
+assert 'Publish(failed)' in download and 'failed["canDownload"] = true' in download
+assert 'VerifyAndFinalizePackage(temporary, finalPath, selected.PackageSize, selected.PackageSha256)' in download
+assert 'CheckUpdatePackageVerification(directory)' in text('validation/IntegratedAppTests.cs')
+assert "'Retry download'" in renderer and "'verifying'" in renderer
 assert 'lastPublishedBytes' in service and 'progressClock.ElapsedMilliseconds >= 250' in service
 assert 'archive.Entries.Count != 1' in service
 assert 'entry.FullName.Replace' in service and '"Lenticulizer.exe"' in service

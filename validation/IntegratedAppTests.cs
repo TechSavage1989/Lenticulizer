@@ -163,6 +163,37 @@ static class IntegratedAppTests
         }
         Console.WriteLine("PASS: imported heightmap pipelines, vertical/horizontal stripe pixels, scale, reference-only updates and unchanged source samples.");
     }
+    static void CheckUpdatePackageVerification(string directory)
+    {
+        string work = Path.Combine(directory, "updater-regression");
+        Directory.CreateDirectory(work);
+        string temporary = Path.Combine(work, "Lenticulizer-test.zip.part");
+        string finalPath = Path.Combine(work, "Lenticulizer-test.zip");
+        byte[] payload = System.Text.Encoding.UTF8.GetBytes("Lenticulizer Windows updater regression test");
+        string digest = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(payload)).ToLowerInvariant();
+        File.WriteAllBytes(temporary, payload);
+        bool oldFailure = false;
+        using (var writer = new FileStream(temporary, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+        {
+            try { UpdateService.VerifyAndFinalizePackage(temporary, finalPath, payload.LongLength, digest); }
+            catch (IOException) { oldFailure = true; }
+        }
+        Check(oldFailure, "Negative control: exclusive writer must block verification on Windows.");
+        Check(!File.Exists(finalPath), "Locked package was incorrectly finalized.");
+        UpdateService.VerifyAndFinalizePackage(temporary, finalPath, payload.LongLength, digest);
+        Check(File.Exists(finalPath) && File.ReadAllBytes(finalPath).SequenceEqual(payload), "Closed-writer verified download failed.");
+        Check(!File.Exists(temporary), "Verified partial file was not moved.");
+        File.WriteAllBytes(temporary, System.Text.Encoding.UTF8.GetBytes(new string('X', payload.Length)));
+        bool tamperFailed = false;
+        try { UpdateService.VerifyAndFinalizePackage(temporary, finalPath, payload.LongLength, digest); }
+        catch (System.Security.Cryptography.CryptographicException) { tamperFailed = true; }
+        Check(tamperFailed && File.ReadAllBytes(finalPath).SequenceEqual(payload), "Tampered file replaced verified package.");
+        bool sizeFailed = false;
+        try { UpdateService.VerifyAndFinalizePackage(temporary, finalPath, payload.LongLength + 1, digest); }
+        catch (InvalidDataException) { sizeFailed = true; }
+        Check(sizeFailed, "Unexpected package size was accepted.");
+        Console.WriteLine("PASS: updater Windows exclusive-lock negative control, close-before-hash, bad-hash and wrong-size rejection.");
+    }
     [STAThread]
     static int Main(string[] args)
     {
@@ -170,7 +201,7 @@ static class IntegratedAppTests
         IntegratedProject app=null;
         try
         {
-            string root=Path.GetFullPath(args[0]);Directory.CreateDirectory(directory);
+            string root=Path.GetFullPath(args[0]);Directory.CreateDirectory(directory);CheckUpdatePackageVerification(directory);
             string session=Path.Combine(directory,"session");Directory.CreateDirectory(session);
             string path=Path.Combine(session,"project.json"), template=Path.Combine(root,"backend","Lenticular-Builder.blend");
             var initial=ProjectJson.Parse(File.ReadAllText(Path.Combine(root,"app","default-project.json")));

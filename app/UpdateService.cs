@@ -285,15 +285,37 @@ namespace Lenticulizer.Desktop
                     ApplyBackoff(response);
                     if (!response.IsSuccessStatusCode) throw new HttpRequestException("Download returned HTTP " + (int)response.StatusCode + ".");
                     long total = response.Content.Headers.ContentLength ?? selected.PackageSize;
-                    if (total <= 0 || total > MaximumDownloadBytes) throw new InvalidDataException("Update package size is not allowed.");
-                    await using var input = await response.Content.ReadAsStreamAsync(cancellation).ConfigureAwait(false);
-                    await using var output = new FileStream(temporary, FileMode.CreateNew, FileAccess.Write, FileShare.None, 1024 * 128, true);
-                    byte[] buffer = new byte[1024 * 128]; long written = 0, lastPublishedBytes = 0; int read;
+                    if (total <= 0 || total > MaximumDownloadBytes || total != selected.PackageSize) throw new InvalidDataException("Update package size does not match the release manifest.");
+                    var beginning = CurrentStatus;
+                    beginning["state"] = "downloading";
+                    beginning["message"] = "Downloading update...";
+                    beginning["downloadedBytes"] = 0L;
+                    beginning["totalBytes"] = total;
+                    beginning["canDownload"] = false;
+                    beginning["canInstall"] = false;
+                    Publish(beginning);
+                    // Close both streams before hashing: FileShare.None previously blocked HashFile on Windows.
+                    long written = 0, lastPublishedBytes = 0;
                     var progressClock = Stopwatch.StartNew();
-                    while ((read = await input.ReadAsync(buffer.AsMemory(0, buffer.Length), cancellation).ConfigureAwait(false)) > 0)
+                    await using (var input = await response.Content.ReadAsStreamAsync(cancellation).ConfigureAwait(false))
+                    await using (var output = new FileStream(temporary, FileMode.CreateNew, FileAccess.Write, FileShare.None, 1024 * 128, true))
                     {
+                        byte[] buffer = new byte[1024 * 128];
+                        while (true)
+                        {
+                            int read;
+                            using (var readTimeout = CancellationTokenSource.CreateLinkedTokenSource(cancellation))
+                            {
+                                readTimeout.CancelAfter(TimeSpan.FromSeconds(60));
+                                try { read = await input.ReadAsync(buffer.AsMemory(0, buffer.Length), readTimeout.Token).ConfigureAwait(false); }
+                                catch (OperationCanceledException) when (!cancellation.IsCancellationRequested)
+                                {
+                                    throw new TimeoutException("No update data was received for 60 seconds.");
+                                }
+                            }
+                            if (read == 0) break;
                         written += read;
-                        if (written > MaximumDownloadBytes || written > selected.PackageSize + 1024 * 1024) throw new InvalidDataException("Update package exceeded the expected size.");
+                        if (written > MaximumDownloadBytes || written > selected.PackageSize) throw new InvalidDataException("Update package exceeded the expected size.");
                         await output.WriteAsync(buffer.AsMemory(0, read), cancellation).ConfigureAwait(false);
                         if (written - lastPublishedBytes >= 4L * 1024 * 1024 || progressClock.ElapsedMilliseconds >= 250)
                         {
@@ -309,11 +331,18 @@ namespace Lenticulizer.Desktop
                             progressClock.Restart();
                         }
                     }
-                    await output.FlushAsync(cancellation).ConfigureAwait(false);
+                        await output.FlushAsync(cancellation).ConfigureAwait(false);
+                    }
                     if (written != selected.PackageSize) throw new InvalidDataException("Downloaded update size does not match the release manifest.");
-                    string hash = HashFile(temporary);
-                    if (!string.Equals(hash, selected.PackageSha256, StringComparison.OrdinalIgnoreCase)) throw new CryptographicException("Downloaded update hash does not match the release manifest.");
-                    File.Move(temporary, finalPath, true);
+                    var verifying = CurrentStatus;
+                    verifying["state"] = "verifying";
+                    verifying["message"] = "Verifying downloaded update...";
+                    verifying["downloadedBytes"] = written;
+                    verifying["totalBytes"] = selected.PackageSize;
+                    verifying["canDownload"] = false;
+                    verifying["canInstall"] = false;
+                    Publish(verifying);
+                    VerifyAndFinalizePackage(temporary, finalPath, selected.PackageSize, selected.PackageSha256);
                     selected.DownloadedPath = finalPath;
                     candidate = selected;
                     var complete = CurrentStatus;
@@ -326,9 +355,30 @@ namespace Lenticulizer.Desktop
                     Publish(complete);
                     return complete;
                 }
+                catch (Exception error) when (!(error is OperationCanceledException && cancellation.IsCancellationRequested))
+                {
+                    Program.Log("Update download failed: " + error);
+                    var failed = CurrentStatus;
+                    failed["state"] = "error";
+                    failed["message"] = "Update download failed: " + Friendly(error);
+                    failed["downloadedBytes"] = 0L;
+                    failed["totalBytes"] = selected.PackageSize;
+                    failed["canDownload"] = true;
+                    failed["canInstall"] = false;
+                    Publish(failed);
+                    return failed;
+                }
                 finally { TryDelete(temporary); }
             }
             finally { singleFlight.Release(); }
+        }
+
+        internal static void VerifyAndFinalizePackage(string temporary, string finalPath, long expectedSize, string expectedSha256)
+        {
+            if (new FileInfo(temporary).Length != expectedSize) throw new InvalidDataException("Downloaded update size does not match the release manifest.");
+            string actual = HashFile(temporary);
+            if (!string.Equals(actual, expectedSha256, StringComparison.OrdinalIgnoreCase)) throw new CryptographicException("Downloaded update hash does not match the release manifest.");
+            File.Move(temporary, finalPath, true);
         }
 
         public UpdateInstallPlan PrepareInstall()

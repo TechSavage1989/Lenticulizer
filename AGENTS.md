@@ -5,7 +5,7 @@ Read `DEVELOPMENT_HANDOFF.md` before changing Lenticulizer.
 ## Baseline rules
 
 - Preserve the confirmed Alpha 31 behavior and Blender add-on v1.18.43 unless a change is explicitly requested.
-- Alpha 32 is the verified published foundation. Alpha 33 is the follow-up prerelease intended for testing a native Alpha 32-to-33 update. Do not describe the updater as end-to-end verified before live validation.
+- Alpha 32/33 contain a Windows updater verification failure: an exclusively open temporary ZIP is hashed before its writer closes. Alpha 34 fixes this and introduces visible verifying/error/retry states and a no-data timeout. A one-time manual installation is required from affected versions. Live updater install/rollback remains unverified.
 - Do not replace this source with older Alpha 26/27 source after reconstruction.
 - Do not publish source, binaries, releases, credentials, or repository-visibility changes without explicit authorization.
 - Do not overwrite published tags/releases.
