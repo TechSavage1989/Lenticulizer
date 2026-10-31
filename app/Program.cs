@@ -10,9 +10,9 @@ using Lenticulizer.Core;
 
 [assembly: AssemblyTitle("Lenticulizer")]
 [assembly: AssemblyProduct("Lenticulizer")]
-[assembly: AssemblyInformationalVersion("3.0.0-alpha.32")]
-[assembly: AssemblyVersion("3.0.0.32")]
-[assembly: AssemblyFileVersion("3.0.0.32")]
+[assembly: AssemblyInformationalVersion("3.0.0-alpha.33")]
+[assembly: AssemblyVersion("3.0.0.33")]
+[assembly: AssemblyFileVersion("3.0.0.33")]
 [assembly: System.Runtime.Versioning.SupportedOSPlatform("windows10.0.17763")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("IntegratedAppTests")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("RuntimeTests")]
@@ -21,7 +21,7 @@ namespace Lenticulizer.Desktop
 {
     internal static class Program
     {
-        public const string Version = "3.0.0-alpha.32";
+        public const string Version = "3.0.0-alpha.33";
         public static readonly string LocalRoot = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         public static readonly string Root = AppDomain.CurrentDomain.BaseDirectory;
         public static void Log(string message)

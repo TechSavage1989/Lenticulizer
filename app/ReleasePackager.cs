@@ -11,9 +11,9 @@ namespace Lenticulizer.Desktop
     {
         internal static readonly string[] Notes = new[]
         {
-            "Uses a stable Lenticulizer.exe launch filename for portable shortcuts.",
-            "Adds explicit GitHub update checks, verified downloads, safe install/restart, and rollback support.",
-            "Stores update cache, downloads, staging, rollback, logs, runtime, and UI profile data under per-user application storage."
+            "Alpha 33 is a small version and Help/Updates text change to test updating from Alpha 32.",
+            "The stable Lenticulizer.exe name, project workflows, settings storage, and Blender add-on v1.18.43 are retained.",
+            "Update checks are automatic; downloading and installing the verified update remain user-initiated."
         };
 
         internal static int Build(string destination)

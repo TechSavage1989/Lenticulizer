@@ -15,12 +15,12 @@
   };
 
   const api = window.lenticulizer || {
-    bootstrap: async () => ({ version: '3.0.0-alpha.32', sessionDir: 'Browser Preview', projectPath: 'Browser preview only', project: browserPreviewProject, backendExists: false, blenderAddon: '', blenderAddonExists: false }),
+    bootstrap: async () => ({ version: '3.0.0-alpha.33', sessionDir: 'Browser Preview', projectPath: 'Browser preview only', project: browserPreviewProject, backendExists: false, blenderAddon: '', blenderAddonExists: false }),
     startBackend: async () => ({ ok: false, error: 'Browser preview only' }),
     backendStatus: async () => ({ running: false }),
     runtimeNotices: async () => false,
-    updateStatus: async () => ({ state: 'unavailable', installedVersion: '3.0.0-alpha.32', latestVersion: '', message: 'Browser preview only', notes: [], canDownload: false, canInstall: false }),
-    checkForUpdates: async () => ({ state: 'unavailable', installedVersion: '3.0.0-alpha.32', latestVersion: '', message: 'Browser preview only', notes: [], canDownload: false, canInstall: false }),
+    updateStatus: async () => ({ state: 'unavailable', installedVersion: '3.0.0-alpha.33', latestVersion: '', message: 'Browser preview only', notes: [], canDownload: false, canInstall: false }),
+    checkForUpdates: async () => ({ state: 'unavailable', installedVersion: '3.0.0-alpha.33', latestVersion: '', message: 'Browser preview only', notes: [], canDownload: false, canInstall: false }),
     downloadUpdate: async () => ({ state: 'error', message: 'Browser preview only' }),
     installUpdate: async () => ({ ok: false, error: 'Browser preview only' }),
     openUpdateRelease: async () => false,
@@ -1602,7 +1602,7 @@
       ]);
       const created = new Date().toISOString();
       const result = await globalThis.LenticulizerTestOutput.createTestSet(
-        colorBytes, heightmapBytes, current.settings || {}, ($('testOutputName')?.value || '').trim(), bootstrap?.version || '3.0.0-alpha.32', created
+        colorBytes, heightmapBytes, current.settings || {}, ($('testOutputName')?.value || '').trim(), bootstrap?.version || '3.0.0-alpha.33', created
       );
       const latest = await api.readProject();
       if (testExportSignature(latest) !== signature) throw new Error('The project changed while the labeled test set was being prepared. Review the current output and retry.');
@@ -1815,7 +1815,7 @@
 
     bootstrap = await api.bootstrap();
     renderUpdateStatus(bootstrap.update || await api.updateStatus());
-    if ($('helpAppVersion')) $('helpAppVersion').textContent = `Lenticulizer 3D ${bootstrap.version || '3.0.0-alpha.32'}`;
+    if ($('helpAppVersion')) $('helpAppVersion').textContent = `Lenticulizer 3D ${bootstrap.version || '3.0.0-alpha.33'}`;
     if(bootstrap.uiTesting) window.__lenticulizerDiagnostics=Object.freeze({view:()=>({...sharedView}),geometry:()=>({samples:liveViewers[0].axisSamples,imported:liveViewers[0].importedGeometry()})});
     $('sessionName').textContent = bootstrap.sessionDir.split(/[\\/]/).pop();
     $('projectPathLabel').textContent = bootstrap.projectPath;

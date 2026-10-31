@@ -2,7 +2,9 @@
 
 ## Current status
 
-**Published prerelease:** Lenticulizer **v3.0.0-alpha.32** for Windows x64, with Blender add-on **v1.18.43**.
+**Alpha 33 updater smoke-test target:** v3.0.0-alpha.33 for Windows x64, from a gated Windows CI publication job. Verify the live tag, successful workflow, uploaded assets and SHA-256 values before describing the release as published. This changes version metadata and visible Help/Updates text only; processing code and the v1.18.43 Blender add-on remain unchanged. Live Alpha 32-to-33 installation and rollback on a real Windows machine remain unverified.
+
+**Previously verified published prerelease:** Lenticulizer **v3.0.0-alpha.32** for Windows x64, with Blender add-on **v1.18.43**.
 
 - Public repository: https://github.com/TechSavage1989/Lenticulizer
 - Default branch: `main`
@@ -96,7 +98,7 @@ The Alpha 32 phase-test regression was caused by the test comparing fitted outpu
 ## Next development and release gates
 
 1. Test the published Alpha 32 ZIP on a normal Windows PC with actual user projects and Blender 5.0 integration.
-2. Create a small uniquely versioned follow-up prerelease to test the **actual updater** (checks, download, staging, install, healthy relaunch, settings and shortcut persistence, cleanup and rollback). Do not overwrite Alpha 32.
+2. Test the Alpha 33 follow-up prerelease via the **actual Alpha 32-to-33 updater** (checks, download, staging, install, healthy relaunch, settings and shortcut persistence, cleanup and rollback). Do not overwrite Alpha 32.
 3. Exercise offline/rate-limit, partial download, tampered package, active-operation and failed-health negative controls on native Windows.
 4. Verify only one rollback and no extra app-owned staging remain.
 5. Address any release issues before describing the automatic updater as production-verified.
