@@ -122,11 +122,34 @@ static class IntegratedAppTests
                 Check(bitmap.Width==input.Width&&bitmap.Height==input.Height,"Imported pair dimensions differ");
                 bool vertical=orientation=="Vertical";
                 int[] stripes=RasterEngine.StripeIndices(vertical?input.Width:input.Height,Convert.ToDouble(solved["reference_heightmap_pitch_px"]),Convert.ToDouble(solved["reference_heightmap_phase_pitch"]),frames.Length,false,true);
-                Color[] colors=frames.Select(frame=>{using(var b=new Bitmap(frame))return b.GetPixel(b.Width/2,b.Height/2);}).ToArray();
-                for(int i=0;i<stripes.Length;i++)
+                // Imported image sources are cropped/resized to the map's physical aspect
+                // before interlacing. Sampling the ORIGINAL source center for every stripe
+                // is an invalid oracle for these gradient images (negative control below).
+                // Compare the same output coordinate in the correctly fitted source.
+                using(var rasters=new RasterEngine())
                 {
-                    Color actual=bitmap.GetPixel(vertical?i:bitmap.Width/2,vertical?bitmap.Height/2:i),expected=colors[stripes[i]];
-                    Check(actual.R==expected.R&&actual.G==expected.G&&actual.B==expected.B,"Imported interlace stripe/phase mismatch "+orientation+" pixel "+i);
+                    Bitmap[] fitted=frames.Select(frame=>rasters.LoadAndFitBitmap(
+                        frame,input.Width,input.Height,
+                        Convert.ToDouble(solved["width_mm"])/Convert.ToDouble(solved["height_mm"]))).ToArray();
+                    try
+                    {
+                        Color[] originalCenters=frames.Select(frame=>{using(var b=new Bitmap(frame))return b.GetPixel(b.Width/2,b.Height/2);}).ToArray();
+                        int invalidCenterOracleCount=0;
+                        for(int i=0;i<stripes.Length;i++)
+                        {
+                            int x=vertical?i:bitmap.Width/2, y=vertical?bitmap.Height/2:i;
+                            Color actual=bitmap.GetPixel(x,y),expected=fitted[stripes[i]].GetPixel(x,y);
+                            Check(actual.R==expected.R&&actual.G==expected.G&&actual.B==expected.B,
+                                "Imported interlace stripe/phase mismatch "+orientation+" pixel "+i+
+                                " (source "+stripes[i]+", actual "+actual+", fitted "+expected+")");
+                            Color originalCenter=originalCenters[stripes[i]];
+                            if(expected.R!=originalCenter.R||expected.G!=originalCenter.G||expected.B!=originalCenter.B)
+                                invalidCenterOracleCount++;
+                        }
+                        Check(invalidCenterOracleCount>0,
+                            "Negative control: source-center-only stripe oracle unexpectedly matches fitted gradient pixels");
+                    }
+                    finally { foreach(Bitmap frame in fitted)frame.Dispose(); }
                 }
             }
             var style=app.Patch(PatchSettings(new Dictionary<string,object>{{"reference_heightmap_display_style","CLEAR"},{"reference_heightmap_show",true}}),"reference",projectPath);
