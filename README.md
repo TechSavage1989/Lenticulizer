@@ -33,17 +33,40 @@ Lenticulizer is a Windows-first desktop tool for preparing lenticular and lens-f
 
 ## Screenshots
 
-**Project and printer setup**
+### Images and interlacing
 
-<img src="docs/images/project-setup.png" alt="Project and printer setup" width="900">
+<table>
+  <tr>
+    <td width="50%"><b>LPI, views, build quality and phase offset with horizontal lenses</b><br><img src="docs/images/interlace-settings.png" alt="LPI, views, build quality and phase offset with horizontal lenses" width="440"></td>
+    <td width="50%"><b>Reference heightmap with detected lens pitch and registration</b><br><img src="docs/images/reference-heightmap.png" alt="Reference heightmap with detected lens pitch and registration" width="440"></td>
+  </tr>
+</table>
 
-**Lens and relief geometry with an angled 3D preview**
+### Project, optics and settings modes
 
-<img src="docs/images/optics.png" alt="Lens and relief geometry with an angled 3D preview" width="900">
+<table>
+  <tr>
+    <td width="50%"><b>Project and printer setup</b><br><img src="docs/images/project-setup.png" alt="Project and printer setup" width="440"></td>
+    <td width="50%"><b>Automatic mode: calculated lens geometry with an angled 3D preview</b><br><img src="docs/images/optics.png" alt="Automatic mode: calculated lens geometry with an angled 3D preview" width="440"></td>
+  </tr>
+  <tr>
+    <td width="50%"><b>Manual mode: thickness, base height and viewing angle set by hand</b><br><img src="docs/images/manual-mode.png" alt="Manual mode: thickness, base height and viewing angle set by hand" width="440"></td>
+    <td width="50%"><b>Lens-Free Relief output with its prism height setting</b><br><img src="docs/images/relief-mode.png" alt="Lens-Free Relief output with its prism height setting" width="440"></td>
+  </tr>
+</table>
 
-**Blender integration**
+### Calibration, Blender and help
 
-<img src="docs/images/blender.png" alt="Blender integration" width="900">
+<table>
+  <tr>
+    <td width="50%"><b>Calibration coupon options</b><br><img src="docs/images/calibration.png" alt="Calibration coupon options" width="440"></td>
+    <td width="50%"><b>Blender integration</b><br><img src="docs/images/blender.png" alt="Blender integration" width="440"></td>
+  </tr>
+  <tr>
+    <td width="50%"><b>Built-in Help & About guide</b><br><img src="docs/images/help.png" alt="Built-in Help & About guide" width="440"></td>
+    <td width="50%"></td>
+  </tr>
+</table>
 
 ## Download
 
