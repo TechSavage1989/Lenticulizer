@@ -1,8 +1,21 @@
-<h1 align="center">Lenticulizer</h1>
+<p align="center">
+  <img src="ui/assets/Lenticulizer_Icon_Source.svg" width="112" alt="Lenticulizer icon">
+</p>
 
+<h1 align="center">Lenticulizer</h1>
 <p align="center">Prepare lenticular and lens-free relief artwork, optical settings, calibration outputs, and Blender previews for 3D printing.</p>
 
-<p align="center"><a href="#download">Download</a> | <a href="#getting-started">Get started</a> | <a href="#features">Features</a> | <a href="#updates-and-settings">Updates</a> | <a href="#development">Development</a></p>
+<p align="center">
+  <a href="https://github.com/TechSavage1989/Lenticulizer/releases/latest">Download</a> ·
+  <a href="#getting-started">Get started</a> ·
+  <a href="#features">Features</a> ·
+  <a href="#screenshots">Screenshots</a> ·
+  <a href="#development">Development</a>
+</p>
+
+<p align="center">
+  <img src="docs/images/hero.png" alt="Lenticulizer main window" width="900">
+</p>
 
 ## Features
 
@@ -18,6 +31,23 @@ Lenticulizer is a Windows-first desktop tool for preparing lenticular and lens-f
 - Export clean production files or a separate labeled test-print set.
 - Use the paired Blender add-on v1.18.43 with Project & Images, Optics & Calibration, and Output tabs.
 
+## Screenshots
+
+**Images and build: ordered source views with the live 3D lens preview**
+
+<img src="docs/images/hero.png" alt="Images and build: ordered source views with the live 3D lens preview" width="900">
+
+**Project and printer setup**
+
+<img src="docs/images/project-setup.png" alt="Project and printer setup" width="900">
+
+**Lens and relief geometry with an angled 3D preview**
+
+<img src="docs/images/optics.png" alt="Lens and relief geometry with an angled 3D preview" width="900">
+
+**Blender integration**
+
+<img src="docs/images/blender.png" alt="Blender integration" width="900">
 
 ## Download
 
