@@ -33,10 +33,6 @@ Lenticulizer is a Windows-first desktop tool for preparing lenticular and lens-f
 
 ## Screenshots
 
-**Images and build: ordered source views with the live 3D lens preview**
-
-<img src="docs/images/hero.png" alt="Images and build: ordered source views with the live 3D lens preview" width="900">
-
 **Project and printer setup**
 
 <img src="docs/images/project-setup.png" alt="Project and printer setup" width="900">
