@@ -2,6 +2,7 @@
 .gitignore
 .github
 AGENTS.md
+CLAUDE.md
 Build_Integrated.bat
 Build_SelfContained.bat
 DEVELOPMENT_HANDOFF.md
